@@ -10,12 +10,12 @@ TESTS_FILES = $(BIN)/test1
 
 CC    = gcc
 FLAGS = -O3 -Wall -std=c99
-LIBS  = -L $(LIB) -lm -ldystr
+LIBS  = -L $(LIB) -lm -ldys
 
-all: dirs libdystr $(TESTS_FILES)
+all: dirs libdys $(TESTS_FILES)
 
-libdystr: dirs $(LIBS_FILES)
-	ar -rcs $(LIB)/libdystr.a $(OBJ)/*.o
+libdys: dirs $(LIBS_FILES)
+	ar -rcs $(LIB)/libdys.a $(OBJ)/*.o
 
 clean:
 	rm -rf $(BIN)
