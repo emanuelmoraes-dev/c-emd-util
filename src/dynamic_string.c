@@ -1,3 +1,4 @@
+#include <math.h>
 #include "dynamic_string.h"
 
 /*
@@ -24,8 +25,9 @@ int STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
     chamada novamente)
 */
 int HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
-    int half = (lenght + 1) / 2 + 1;
-    return lenght + 1 + half;
+    lenght++;
+    int half = ceil(lenght / 2.0);
+    return lenght + half;
 }
 
 /*
@@ -164,7 +166,7 @@ interferir em uma realocações futuras)
 short set__length_allocated(String* str, int length_allocated) {
     if (str->lenght >= length_allocated)
         return 0;
-    
+
     str->c_str = (char*) realloc(str->c_str, sizeof(char) * length_allocated);
     str->__length_allocated = length_allocated;
     return 1;
@@ -282,7 +284,6 @@ int size_split_string(String* str, const char* sep) {
     int i;
     String* sub = new_string_allocated("", len_sep + 1);
     for (i = 0; i < str->lenght; i++) {
-        char ch = str->c_str[i];
         sub_string(str, sub, i, i + len_sep);
 
         if (strcmp(sub->c_str, sep) == 0) {
@@ -340,4 +341,3 @@ short split_string(String* str, String* target[], const char* sep) {
     free_string(sub);
     return 1;
 }
-

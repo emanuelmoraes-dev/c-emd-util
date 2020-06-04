@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "include/dynamic_string.h"
+#include "dynamic_string.h"
 
 int main (int argc, const char* argv[]) {
 
@@ -66,15 +66,14 @@ int main (int argc, const char* argv[]) {
     for (i = 0; i < sizeSplit; i++) {
         printf("str = %s\n", splitArray[i]->c_str);
     }
-    
+
     for (i = 0; i < sizeSplit; i++) {
         free_string(splitArray[i]);
     }
 
     free_string(str);
 
-    /*
-    String* str = new_string_reallocate_strategy("Hello!", 2, STRICT_STRATEGY_REALLOCATED);
+    str = new_string_reallocate_strategy("Hello!", 2, STRICT_STRATEGY_REALLOCATED);
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
@@ -83,10 +82,8 @@ int main (int argc, const char* argv[]) {
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
     free_string(str);
-    */
 
-    /*
-    String* str = new_string_reallocate_strategy("Hello!", 2, HALF_STRATEGY_REALLOCATED);
+    str = new_string_reallocate_strategy("Hello!", 2, HALF_STRATEGY_REALLOCATED);
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
@@ -95,10 +92,8 @@ int main (int argc, const char* argv[]) {
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
     free_string(str);
-    */
-    
-    /*
-    String* str = new_string_reallocate_strategy("Hello!", 2, DOUBLE_STRATEGY_REALLOCATED);
+
+    str = new_string_reallocate_strategy("Hello!", 2, DOUBLE_STRATEGY_REALLOCATED);
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
@@ -107,23 +102,18 @@ int main (int argc, const char* argv[]) {
     printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
 
     free_string(str);
-    */
 
-    /*
-    String* str = new_string_allocated("1234567", 9);
-    
+    str = new_string_allocated("1234567", 9);
+
     printf("%d\n", get_length_allocated_string(str));
-    
-    free_string(str);
-    */
 
-    /*
-    String* str = new_string_allocated("1234567", 3);
-    
-    printf("%d\n", get_length_allocated_string(str));
-    
     free_string(str);
-    */
+
+    str = new_string_allocated("1234567", 3);
+
+    printf("%d\n", get_length_allocated_string(str));
+
+    free_string(str);
 
     return 0;
 }
