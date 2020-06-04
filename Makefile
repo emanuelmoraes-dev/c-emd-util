@@ -14,12 +14,7 @@ LIBS  = -L $(LIB) -lm -ldystr
 
 all: dirs libdystr $(TESTS_FILES)
 
-test-%: dirs libdystr $(BIN)/%
-
 libdystr: dirs $(LIBS_FILES)
-	ar -rcs $(LIB)/libdystr.a $(OBJ)/*.o
-
-lib-%: dirs $(OBJ)/%.o
 	ar -rcs $(LIB)/libdystr.a $(OBJ)/*.o
 
 clean:
