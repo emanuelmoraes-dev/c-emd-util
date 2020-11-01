@@ -12,10 +12,10 @@ CC    = gcc
 FLAGS = -O3 -Wall -std=c99
 LIBS  = -L $(LIB) -lm -ldys
 
-all: dirs libdys $(TESTS_FILES)
+all: dirs libcemdutil $(TESTS_FILES)
 
-libdys: dirs $(LIBS_FILES)
-	ar -rcs $(LIB)/libdys.a $(OBJ)/*.o
+libcemdutil: dirs $(LIBS_FILES)
+	ar -rcs $(LIB)/libcemdutil.a $(OBJ)/*.o
 
 clean:
 	rm -rf $(BIN)
