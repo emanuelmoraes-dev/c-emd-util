@@ -5,7 +5,7 @@ OBJ     = ./obj
 SRC     = ./src
 TESTS   = ./src/tests
 
-LIBS_FILES  = $(OBJ)/dynamic_string.o
+LIBS_FILES  = $(OBJ)/dynamic_string.o $(OBJ)/linked_list.o
 TESTS_FILES = $(BIN)/test1
 
 CC    = gcc
