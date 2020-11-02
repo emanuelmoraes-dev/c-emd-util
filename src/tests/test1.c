@@ -5,115 +5,115 @@ int main (int argc, const char* argv[]) {
 
     String* str = new_string("123");
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_min__length_allocated(str, 20);
+    string_set_min_length_allocated(str, 20);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_min__length_allocated(str, 40);
+    string_set_min_length_allocated(str, 40);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_max__length_allocated(str, 2);
+    string_set_max_length_allocated(str, 2);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_max__length_allocated(str, 4);
+    string_set_max_length_allocated(str, 4);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_max__length_allocated(str, 3);
+    string_set_max_length_allocated(str, 3);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set__length_allocated(str, 100);
+    string_set_length_allocated(str, 100);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set__length_allocated(str, 50);
+    string_set_length_allocated(str, 50);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set__length_allocated(str, 10);
+    string_set_length_allocated(str, 10);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    set_string(str, "Meu Feijão com Arroz");
-
-    printf("%s\n", str->c_str);
-    printf("%d\n", str->lenght);
-    printf("%d\n", get_length_allocated_string(str));
-
-    cat_string(str, "oiujmnfghvbfteqaxdpzsu");
+    string_set(str, "Meu Feijão com Arroz");
 
     printf("%s\n", str->c_str);
     printf("%d\n", str->lenght);
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
+
+    string_cat(str, "oiujmnfghvbfteqaxdpzsu");
+
+    printf("%s\n", str->c_str);
+    printf("%d\n", str->lenght);
+    printf("%d\n", string_get_length_allocated(str));
 
     String* sub = new_string("");
-    sub_string(str, sub, 4, 30);
+    string_sub(str, sub, 4, 30);
     printf("%s\n", sub->c_str);
     printf("%d\n", sub->lenght);
-    printf("%d\n", get_length_allocated_string(sub));
-    free_string(sub);
+    printf("%d\n", string_get_length_allocated(sub));
+    string_free(sub);
 
-    int sizeSplit = size_split_string(str, "e");
+    int sizeSplit = string_size_split(str, "e");
     printf("sizeSplit = %d\n", sizeSplit);
     String* splitArray[sizeSplit];
-    split_string(str, splitArray, "e");
+    string_split(str, splitArray, "e");
     int i;
     for (i = 0; i < sizeSplit; i++) {
         printf("str = %s\n", splitArray[i]->c_str);
     }
 
     for (i = 0; i < sizeSplit; i++) {
-        free_string(splitArray[i]);
+        string_free(splitArray[i]);
     }
 
-    free_string(str);
+    string_free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 2, STRICT_STRATEGY_REALLOCATED_STRING);
+    str = new_string_reallocate_strategy("Hello!", 2, STRING_STRICT_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    cat_string(str, " World!");
+    string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    free_string(str);
+    string_free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 2, HALF_STRATEGY_REALLOCATED_STRING);
+    str = new_string_reallocate_strategy("Hello!", 2, STRING_HALF_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    cat_string(str, " World!");
+    string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    free_string(str);
+    string_free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 2, DOUBLE_STRATEGY_REALLOCATED_STRING);
+    str = new_string_reallocate_strategy("Hello!", 2, STRING_DOUBLE_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    cat_string(str, " World!");
+    string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, get_length_allocated_string(str));
+    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    free_string(str);
+    string_free(str);
 
     str = new_string_allocated("1234567", 9);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    free_string(str);
+    string_free(str);
 
     str = new_string_allocated("1234567", 3);
 
-    printf("%d\n", get_length_allocated_string(str));
+    printf("%d\n", string_get_length_allocated(str));
 
-    free_string(str);
+    string_free(str);
 
     return 0;
 }

@@ -11,7 +11,7 @@ tamanho da string
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int STRICT_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
+int STRING_STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
     return lenght+1;
 }
 
@@ -24,7 +24,7 @@ int STRICT_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int HALF_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
+int STRING_HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
     lenght++;
     int half = ceil(lenght / 2.0);
     return lenght + half;
@@ -39,7 +39,7 @@ int HALF_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int DOUBLE_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
+int STRING_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
     length_allocated = MAX(1, length_allocated);
     return length_allocated*2;
 }
@@ -55,7 +55,7 @@ String->reallocate_strategy = reallocate_strategy
 @param reallocate_strategy - Estratégia para realocação
 @return - Nova instância de String dinâmica
 */
-String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateStrategyString* reallocate_strategy) {
+String* new_string_reallocate_strategy(const char* s, int min_extra, StringReallocateStrategy* reallocate_strategy) {
     String* str = (String*) malloc(sizeof(String));
     str->min_extra = min_extra;
     str->reallocate_strategy = reallocate_strategy;
@@ -76,8 +76,8 @@ String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateS
 Construtor da string dinâmica. O min_extra será atribuído, mas será ignorado
 para a alocação neste construtor
 
-String->min_extra = DEFAULT_MIN_EXTRA_STRING # 20
-String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING # HALF_STRATEGY_REALLOCATED_STRING
+String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
+String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
 
 @param s - Valor a ser copiado para String dinâmica
 @param min_length_allocated - Quantidade mínima que estar alocado
@@ -85,11 +85,11 @@ String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING # HALF_STRATEG
 */
 String* new_string_allocated(const char* s, int min_length_allocated) {
     String* str = (String*) malloc(sizeof(String));
-    str->min_extra = DEFAULT_MIN_EXTRA_STRING;
-    str->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING;
+    str->min_extra = STRING_DEFAULT_MIN_EXTRA;
+    str->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED;
     str->lenght = strlen(s);
     str->__length_allocated = 0;
-    str->__length_allocated = STRICT_STRATEGY_REALLOCATED_STRING(str->__length_allocated, str->lenght);
+    str->__length_allocated = STRING_STRICT_STRATEGY_REALLOCATED(str->__length_allocated, str->lenght);
     str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
     str->c_str = (char*) malloc(sizeof(char) * str->__length_allocated);
     strcpy(str->c_str, s);
@@ -99,21 +99,21 @@ String* new_string_allocated(const char* s, int min_length_allocated) {
 /*
 Construtor da string dinâmica
 
-String->min_extra = DEFAULT_MIN_EXTRA_STRING # 20
-String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING # HALF_STRATEGY_REALLOCATED_STRING
+String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
+String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
 
 @param s - Valor a ser copiado para String dinâmica
 @return Nova instância de String dinâmica
 */
 String* new_string(const char* s) {
-    return new_string_reallocate_strategy(s, DEFAULT_MIN_EXTRA_STRING, DEFAULT_STRATEGY_REALLOCATED_STRING);
+    return new_string_reallocate_strategy(s, STRING_DEFAULT_MIN_EXTRA, STRING_DEFAULT_STRATEGY_REALLOCATED);
 }
 
 /*
 @param str - Instância da String dinâmicas
 @return - quantidade de espaço alocado para a String dinâmica
 */
-int get_length_allocated_string(String* str) {
+int string_get_length_allocated(String* str) {
     return str->__length_allocated;
 }
 
@@ -136,7 +136,7 @@ interferir em uma realocações futuras)
 @param length_allocated - quantidade mínima que deve estar alocada
 @return - 1 se uma realocação foi necessária, 0 caso contrário
 */
-short set_min__length_allocated(String* str, int length_allocated) {
+short string_set_min_length_allocated(String* str, int length_allocated) {
     if (str->__length_allocated >= length_allocated)
         return 0;
 
@@ -154,7 +154,7 @@ interferir em uma realocações futuras)
 @param length_allocated - quantidade máxima que deve estar alocada
 @return - 1 se uma realocação foi necessária, 0 caso contrário
 */
-short set_max__length_allocated(String* str, int length_allocated) {
+short string_set_max_length_allocated(String* str, int length_allocated) {
     if (str->__length_allocated <= length_allocated || str->lenght >= length_allocated)
         return 0;
 
@@ -173,7 +173,7 @@ interferir em uma realocações futuras)
 @param length_allocated - quantidade exata que deve estar alocada
 @return - 1 se uma realocação ocorreu, 0 caso contrário
 */
-short set__length_allocated(String* str, int length_allocated) {
+short string_set_length_allocated(String* str, int length_allocated) {
     if (str->lenght >= length_allocated)
         return 0;
 
@@ -189,7 +189,7 @@ Atribui novo valor para a String dinâmica
 @param s - Valor a ser atribuído a 'str'
 @return - 1 se foi executado com sucesso, 0 caso contrário
 */
-short set_string(String* str, const char* s) {
+short string_set(String* str, const char* s) {
     str->lenght = strlen(s);
     int flag = 0;
 
@@ -214,13 +214,13 @@ Concatena a String dinâmica com um valor
 @param s - Valor a ser concatenado
 @return - 1 se foi executado com sucesso, 0 caso contrário
 */
-short cat_string(String* str, const char* s) {
+short string_cat(String* str, const char* s) {
     int len_s = strlen(s);
     char ns[len_s + str->lenght + 2];
     strcpy(ns, "");
     strcpy(ns, str->c_str);
     strcat(ns, s);
-    set_string(str, ns);
+    string_set(str, ns);
     return 1;
 }
 
@@ -230,7 +230,7 @@ Remove a String dinâmica da memória
 @param str - Instância da String dinâmica a ser removida
 @return - 1 se foi executado com sucesso, 0 caso contrário
 */
-short free_string(String* str) {
+short string_free(String* str) {
     str->__length_allocated = 0;
     str->lenght = 0;
     free(str->c_str);
@@ -249,7 +249,7 @@ String dinâmica
 @param end - Posição final da substring (não incluso)
 @return - 1 se executado com sucesso, 0 caso contrário
 */
-short sub_string(String* str, String* target, int start, int end) {
+short string_sub(String* str, String* target, int start, int end) {
     if (str == target)
         return 0;
 
@@ -260,8 +260,8 @@ short sub_string(String* str, String* target, int start, int end) {
 
     int len_sub = end - start;
 
-    set_string(target, "");
-    set_min__length_allocated(target, len_sub + 1);
+    string_set(target, "");
+    string_set_min_length_allocated(target, len_sub + 1);
 
     int i;
     for (i = 0; i < len_sub; i++)
@@ -274,14 +274,14 @@ short sub_string(String* str, String* target, int start, int end) {
 
 /*
 Retorna o tamanho do array necessário para armazenar
-o resultado do método "split_string"
+o resultado do método "string_split"
 
 @param str - Instância da String dinâmica que será separada
 @param sep - Separador que divide a String em várias partes
 @return - Tamanho do array que armazenará o resultado
 do split
 */
-int size_split_string(String* str, const char* sep) {
+int string_size_split(String* str, const char* sep) {
     if (strcmp(sep, "") == 0)
         return str->lenght;
 
@@ -294,7 +294,7 @@ int size_split_string(String* str, const char* sep) {
     int i;
     String* sub = new_string_allocated("", len_sep + 1);
     for (i = 0; i < str->lenght; i++) {
-        sub_string(str, sub, i, i + len_sep);
+        string_sub(str, sub, i, i + len_sep);
 
         if (strcmp(sub->c_str, sep) == 0) {
             size++;
@@ -302,7 +302,7 @@ int size_split_string(String* str, const char* sep) {
         }
     }
 
-    free_string(sub);
+    string_free(sub);
     return size;
 }
 
@@ -318,7 +318,7 @@ array devem estar desalocadas da memória
 @param sep - Separador que divide a String em várias partes
 @return - 1 se foi executado com sucesso, 0 caso contrário
 */
-short split_string(String* str, String* target[], const char* sep) {
+short string_split(String* str, String* target[], const char* sep) {
     int len_sep = strlen(sep);
     int i_target = 0;
 
@@ -329,11 +329,11 @@ short split_string(String* str, String* target[], const char* sep) {
     String* sub = new_string_allocated("", len_sep + 1);
     for (i = 0; i < str->lenght; i++) {
         char ch = str->c_str[i];
-        sub_string(str, sub, i, i + len_sep);
+        string_sub(str, sub, i, i + len_sep);
 
         if (strcmp(sep, "") == 0) {
             char ch_str[] = { ch, '\0' };
-            set_string(target[i_target], ch_str);
+            string_set(target[i_target], ch_str);
             i_target++;
 
             if (i+1 < str->lenght)
@@ -344,11 +344,11 @@ short split_string(String* str, String* target[], const char* sep) {
             i += len_sep-1;
         } else {
             char ch_str[] = { ch, '\0' };
-            cat_string(target[i_target], ch_str);
+            string_cat(target[i_target], ch_str);
         }
     }
 
-    free_string(sub);
+    string_free(sub);
     return 1;
 }
 
@@ -358,7 +358,7 @@ contrário
 
 @param value - substring que será buscada
 */
-short find_substring(String* src, String* value) {
+short string_find_sub(String* src, String* value) {
     if (value->lenght == 0)
         return 1;
 
@@ -370,7 +370,7 @@ short find_substring(String* src, String* value) {
         if (i < src->lenght - value->lenght + 1)
             break;
 
-        sub_string(src, verify, i, value->lenght);
+        string_sub(src, verify, i, value->lenght);
 
         if (strcmp(verify->c_str, value->c_str) == 0) {
             finded = 1;
@@ -378,7 +378,7 @@ short find_substring(String* src, String* value) {
         }
     }
 
-    free_string(verify);
+    string_free(verify);
 
     return finded;
 }
@@ -395,42 +395,42 @@ por "value". "target" precisa já estar alocada
 @param replace - substring que será buscada
 @param value - valor que irá substituir "replace"
 */
-void replace_string(String* src, String* target, String* replace, String* value) {
+void string_replace(String* src, String* target, String* replace, String* value) {
     if (src->lenght == 0 || replace->lenght == 0) {
-        set_string(target, src->c_str);
+        string_set(target, src->c_str);
         return;
     }
 
-    set_string(target, "");
+    string_set(target, "");
     String* verify = new_string_allocated("", replace->lenght + 1);
 
     int i = 0;
     while (i < src->lenght) {
         if (i >= src->lenght - replace->lenght + 1) {
             char ch[] = { src->c_str[i], '\0' };
-            cat_string(target, ch);
+            string_cat(target, ch);
             i++;
             break;
         }
 
-        sub_string(src, verify, i, replace->lenght);
+        string_sub(src, verify, i, replace->lenght);
 
         if (strcmp(verify->c_str, replace->c_str) == 0) {
-            cat_string(target, value->c_str);
+            string_cat(target, value->c_str);
             i += replace->lenght;
 
-            if (sub_string(src, verify, i, src->lenght))
-                cat_string(target, verify);
+            if (string_sub(src, verify, i, src->lenght))
+                string_cat(target, verify);
 
             break;
         } else {
             char ch[] = { src->c_str[i], '\0' };
-            cat_string(target, ch);
+            string_cat(target, ch);
             i++;
         }
     }
 
-    free_string(verify);
+    string_free(verify);
 }
 
 /*
@@ -445,37 +445,37 @@ por "value". "target" precisa já estar alocada
 @param replace - substring que será buscada
 @param value - valor que irá substituir "replace"
 */
-void replace_all_string(String* src, String* target, String* replace, String* value) {
+void string_replace_all(String* src, String* target, String* replace, String* value) {
     if (src->lenght == 0 || replace->lenght == 0) {
-        set_string(target, src->c_str);
+        string_set(target, src->c_str);
         return;
     }
 
-    set_string(target, "");
+    string_set(target, "");
     String* verify = new_string_allocated("", replace->lenght + 1);
 
     int i = 0;
     while (i < src->lenght) {
         if (i >= src->lenght - replace->lenght + 1) {
             char ch[] = { src->c_str[i], '\0' };
-            cat_string(target, ch);
+            string_cat(target, ch);
             i++;
             break;
         }
 
-        sub_string(src, verify, i, replace->lenght);
+        string_sub(src, verify, i, replace->lenght);
 
         if (strcmp(verify->c_str, replace->c_str) == 0) {
-            cat_string(target, value->c_str);
+            string_cat(target, value->c_str);
             i += replace->lenght;
         } else {
             char ch[] = { src->c_str[i], '\0' };
-            cat_string(target, ch);
+            string_cat(target, ch);
             i++;
         }
     }
 
-    free_string(verify);
+    string_free(verify);
 }
 
 struct __ReadLineCache {
@@ -566,7 +566,7 @@ alocada
 @param ignore_endl - Se 1, ignora quebras de linha
 @return 1 se a operação for executada com sucesso. 0 caso contrário
 */
-short read_full_line_string(FILE* file, String* target, short ignore_endl) {
+short string_read_full_line(FILE* file, String* target, short ignore_endl) {
     short NO_INPUT = 0;
     short OK = 1;
     short TOO_LONG = 2;
@@ -583,21 +583,21 @@ short read_full_line_string(FILE* file, String* target, short ignore_endl) {
             if (cache.before == NULL)
                 cache.before = new_string(target->c_str);
             else
-                set_string(cache.before, target->c_str);
+                string_set(cache.before, target->c_str);
 
             size_t alloc_size = target->reallocate_strategy(target->__length_allocated, target->lenght);
             alloc_size = MAX(alloc_size, (target->lenght+1) + (target->min_extra));
-            set_min__length_allocated(target, alloc_size);
+            string_set_min_length_allocated(target, alloc_size);
         }
     } while (status != OK && status != NO_INPUT);
 
     if (cache.before != NULL) {
-        free_string(&cache.before);
+        string_free(&cache.before);
         cache.before = NULL;
     }
 
     if (status == NO_INPUT) {
-        set_string(target, "");
+        string_set(target, "");
         return NO_INPUT;
     }
 
