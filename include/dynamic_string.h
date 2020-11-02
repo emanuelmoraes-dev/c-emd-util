@@ -1,6 +1,7 @@
 #ifndef DYNAMIC_STRING_H_INCLUDED
 #define DYNAMIC_STRING_H_INCLUDED
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
@@ -51,12 +52,12 @@ Struct que representa uma instância de uma String dinâmica
 typedef struct st_string {
     // public
     char* c_str; // String e formato C
-    int lenght; // Quantidade de caracteres da string
-    int min_extra; // Quantidade mínima de espaço extra na realocação da String
+    size_t lenght; // Quantidade de caracteres da string
+    size_t min_extra; // Quantidade mínima de espaço extra na realocação da String
     ReallocateStrategy* reallocate_strategy; // Estratégia de realocação de espaço
 
     // private
-    int __length_allocated; // Espaço alocado na memória
+    size_t __length_allocated; // Espaço alocado na memória
 } String;
 
 /*
@@ -158,7 +159,7 @@ String dinâmica
 
 @param str - Instânciada String dinâmica
 @param target - Instância que irá receber a substring. Precisa
-    já estar alocada. Não pode ser a mesma instância de target
+    já estar alocada. Não pode ser a mesma instância de str
 @param start - Posição inicial da substring
 @param end - Posição final da substring (não incluso)
 @return - 1 se executado com sucesso, 0 caso contrário
@@ -183,11 +184,60 @@ array devem estar desalocadas da memória
 
 @param str - Instância da String dinâmica que será separada
 @param target - Array que armazenará o resultado do split. O
-    array deve estar completamente desalocado da 
+    array deve estar completamente desalocado da
     memória
 @param sep - Separador que divide a String em várias partes
 @return - 1 se foi executado com sucesso, 0 caso contrário
 */
 short split_string(String* str, String* target[], const char* sep);
+
+/*
+Retorna 1 se existir uma substring igual a "target". 0 caso
+contrário
+
+@param target - substring que será buscada
+*/
+short find_substring(String* src, String* target);
+
+/*
+Atribui em "target" uma string dinâmica na qual a primeira substring
+de "src" igual a "replace" foi substituída pelo conteúdo
+por "value". "target" precisa já estar alocada
+
+@param src - string dinâmica na qual terá a primeira substring
+    substituída
+@param target - string que irá receber a nova string dinâmica. Precisa
+    já estar alocada
+@param replace - substring que será buscada
+@param value - valor que irá substituir "replace"
+*/
+void replace_string(String* src, String* target, String* replace, String* value);
+
+/*
+Atribui em "target" uma string dinâmica na qual TODAS as substrings
+de "src" iguais a "replace" foram substituídas pelo conteúdo
+por "value". "target" precisa já estar alocada
+
+@param src - string dinâmica na qual terá TODAS as substrings
+    substituídas
+@param target - string que irá receber nova string dinâmica. Precisa
+    já estar alocada
+@param replace - substring que será buscada
+@param value - valor que irá substituir "replace"
+*/
+void replace_all_string(String* src, String* target, String* replace, String* value);
+
+/*
+Atribui em "target" o conteúdo de uma linha inteira de um arquivo,
+independente da quantidade de caracteres. "target" precisa já estar
+alocada
+
+@param file - arquivo na qual a linha será lida
+@param target - string dinâmica que irá receber o conteúdo da linha.
+    Precisa já estar alocada
+@param ignore_endl - Se 1, ignora quebras de linha
+@return 1 se a operação for executada com sucesso. 0 caso contrário
+*/
+short read_full_line_string(FILE* file, String* target, short ignore_endl);
 
 #endif // DYNAMIC_STRING_H_INCLUDED
