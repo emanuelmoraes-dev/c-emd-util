@@ -11,7 +11,7 @@ tamanho da string
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
+int STRICT_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
     return lenght+1;
 }
 
@@ -24,7 +24,7 @@ int STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
+int HALF_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
     lenght++;
     int half = ceil(lenght / 2.0);
     return lenght + half;
@@ -39,7 +39,7 @@ int HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int lenght) {
+int DOUBLE_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght) {
     length_allocated = MAX(1, length_allocated);
     return length_allocated*2;
 }
@@ -55,7 +55,7 @@ String->reallocate_strategy = reallocate_strategy
 @param reallocate_strategy - Estratégia para realocação
 @return - Nova instância de String dinâmica
 */
-String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateStrategy* reallocate_strategy) {
+String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateStrategyString* reallocate_strategy) {
     String* str = (String*) malloc(sizeof(String));
     str->min_extra = min_extra;
     str->reallocate_strategy = reallocate_strategy;
@@ -76,8 +76,8 @@ String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateS
 Construtor da string dinâmica. O min_extra será atribuído, mas será ignorado
 para a alocação neste construtor
 
-String->min_extra = DEFAULT_MIN_EXTRA # 20
-String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED # HALF_STRATEGY_REALLOCATED
+String->min_extra = DEFAULT_MIN_EXTRA_STRING # 20
+String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING # HALF_STRATEGY_REALLOCATED_STRING
 
 @param s - Valor a ser copiado para String dinâmica
 @param min_length_allocated - Quantidade mínima que estar alocado
@@ -85,11 +85,11 @@ String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED # HALF_STRATEGY_REALL
 */
 String* new_string_allocated(const char* s, int min_length_allocated) {
     String* str = (String*) malloc(sizeof(String));
-    str->min_extra = DEFAULT_MIN_EXTRA;
-    str->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED;
+    str->min_extra = DEFAULT_MIN_EXTRA_STRING;
+    str->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING;
     str->lenght = strlen(s);
     str->__length_allocated = 0;
-    str->__length_allocated = STRICT_STRATEGY_REALLOCATED(str->__length_allocated, str->lenght);
+    str->__length_allocated = STRICT_STRATEGY_REALLOCATED_STRING(str->__length_allocated, str->lenght);
     str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
     str->c_str = (char*) malloc(sizeof(char) * str->__length_allocated);
     strcpy(str->c_str, s);
@@ -99,14 +99,14 @@ String* new_string_allocated(const char* s, int min_length_allocated) {
 /*
 Construtor da string dinâmica
 
-String->min_extra = DEFAULT_MIN_EXTRA # 20
-String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED # HALF_STRATEGY_REALLOCATED
+String->min_extra = DEFAULT_MIN_EXTRA_STRING # 20
+String->reallocate_strategy = DEFAULT_STRATEGY_REALLOCATED_STRING # HALF_STRATEGY_REALLOCATED_STRING
 
 @param s - Valor a ser copiado para String dinâmica
 @return Nova instância de String dinâmica
 */
 String* new_string(const char* s) {
-    return new_string_reallocate_strategy(s, DEFAULT_MIN_EXTRA, DEFAULT_STRATEGY_REALLOCATED);
+    return new_string_reallocate_strategy(s, DEFAULT_MIN_EXTRA_STRING, DEFAULT_STRATEGY_REALLOCATED_STRING);
 }
 
 /*

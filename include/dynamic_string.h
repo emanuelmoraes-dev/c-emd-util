@@ -6,11 +6,11 @@
 #include <stdlib.h>
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
-#define DEFAULT_MIN_EXTRA 20 // Quantidade mínima de espaço extra em realocações de memória
-#define DEFAULT_STRATEGY_REALLOCATED HALF_STRATEGY_REALLOCATED // Estratégia padrão de realocação de memória
+#define DEFAULT_MIN_EXTRA_STRING 20 // Quantidade mínima de espaço extra em realocações de memória
+#define DEFAULT_STRATEGY_REALLOCATED_STRING HALF_STRATEGY_REALLOCATED_STRING // Estratégia padrão de realocação de memória
 
 /* Define o tipo de realocação que a String terá */
-typedef int ReallocateStrategy(int length_allocated, int lenght);
+typedef int ReallocateStrategyString(int length_allocated, int lenght);
 
 /*
 Cria uma estratégia de realocar apenas o espaço necessário pelo
@@ -22,7 +22,7 @@ tamanho da string
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght);
+int STRICT_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght);
 
 /*
 É a estratégia de realocar adicionando a metade do tamanho da string
@@ -33,7 +33,7 @@ int STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght);
+int HALF_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght);
 
 /*
 É a estratégia de realocar o dobro do que foi alocado anteriormente
@@ -44,7 +44,7 @@ int HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 @return - Novo espaço a ser realocado (se não for o suficiente, a função será
     chamada novamente)
 */
-int DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int lenght);
+int DOUBLE_STRATEGY_REALLOCATED_STRING(int length_allocated, int lenght);
 
 /*
 Struct que representa uma instância de uma String dinâmica
@@ -54,7 +54,7 @@ typedef struct st_string {
     char* c_str; // String e formato C
     size_t lenght; // Quantidade de caracteres da string
     size_t min_extra; // Quantidade mínima de espaço extra na realocação da String
-    ReallocateStrategy* reallocate_strategy; // Estratégia de realocação de espaço
+    ReallocateStrategyString* reallocate_strategy; // Estratégia de realocação de espaço
 
     // private
     size_t __length_allocated; // Espaço alocado na memória
@@ -68,7 +68,7 @@ Construtor da string dinâmica
 @param reallocate_strategy - Estratégia para realocação
 @return - Nova instância de String dinâmica
 */
-String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateStrategy* reallocate_strategy);
+String* new_string_reallocate_strategy(const char* s, int min_extra, ReallocateStrategyString* reallocate_strategy);
 
 /*
 Construtor da string dinâmica
