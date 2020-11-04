@@ -88,70 +88,154 @@ Remove do LinkedList sem apagar da memória o elemento posterior ao elemento rec
 */
 void* linked_list_remove_next(LinkedList* linked_list, LinkedListElement* element);
 
-// remove a lista da memoria sem remover os contatos da lista da memoria, a partir de head
+/*
+Remove o LinkedList da memória sem remover seus elementos da memória, a partir de head
+
+@param linked_list instância do LinkedList
+@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+*/
 void linked_list_free_by_head(LinkedList* linked_list, LinkedListElement* head);
 
 // apaga a lista e os elementos da lista da memoria a partir do head
+/*
+Remove o LinkedList da memória e remove seus elementos da memória, a partir de head
+
+@param linked_list instância do LinkedList
+@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+*/
 void linked_list_free_eraser_by_head(LinkedList* linked_list, LinkedListElement* head);
 
 // apaga a lista e os elementos são apagados por meio de função destrutora, a partir de head
+/*
+Remove o LinkedList da memória e remove seus elementos da memória, a partir de head, executando
+função destrutora para cada elemento elemento, após sua remoção
+
+@param linked_list instância do LinkedList
+@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+@param destructor destrutora para cada elemento do LinkedList
+*/
 void linked_list_free_eraser_destructor_by_head(LinkedList* linked_list, LinkedListElement* head, void (*destructor)(void*));
 
-// busca um LinkedListElement da lista que possui a posição fornecida
+/*
+Busca um LinkedListElement di LinkedList que possui a posição fornecida
+
+@param linked_list instância do LinkedList
+@param index posição do elemento a ser buscado
+@return LinkedListElement* que possui a posição fornecida
+*/
 LinkedListElement* linked_list_find_element_by_index(LinkedList* linked_list, int index);
 
-// busca um LinkedListElement da lista que possui a mesma referencia fornecida
+/**
+ * Busca um LinkedListElement* da lista que possui um valor com a mesma referencia fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param value referência que aponta para o valor do LinkedListElement a ser buscado
+ */
 LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list, void* value);
 
 // ### implements interface_list.h ###
 
-/*
-Busca a referencia do elemento do LinkedList que possui a posição fornecida
-*/
+/**
+ * Busca a referência do elemento do LinkedList que possui a posição fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição do alemento a ser buscado
+ * @return a referência do valor buscado. NULL caso não seja encontrado
+ */
 void* linked_list_find_by_index(LinkedList* array, int index);
 
-/*
-Busca a referencia do elemento do LinkedList que possui a referência fornecida
-*/
+/**
+ * Busca a referência do elemento do LinkedList que possui a referência fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param value referência do valor a ser buscado
+ * @return a referência do valor buscado. NULL caso não seja encontrado
+ */
 void* linked_list_find_by_reference(LinkedList* array, void* value);
 
-// adiciona um elemento no fim na lista
+/**
+ * Adiciona no final do LinkedList um valor
+ *
+ * @param linked_list instância do LinkedList que receberá o valor
+ * @param value valor a ser adicionado no final do LinkedList
+ */
 void linked_list_add(LinkedList* linked_list, void* value);
 
-// adiciona um elemento na lista na posicao informada
+/**
+ * Adiciona um elemento no LinkedList na posicao informada
+ *
+ * @param linked_list instância do LinkedList
+ * @param value valor a ser adicionado
+ * @param index posição a ser adicionada o valor
+ */
 void linked_list_add_at(LinkedList* linked_list, void* value, int index);
 
-// remove da lista e apaga da memoria a refêrencia fornecida
+/**
+ * Remove do LinkedList e apaga da memoria a refêrencia fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param value valor a ser removido do LinkedList e apagado da memória
+ */
 void linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
 
-// remove da lista e apaga elemento da memoria que possui o identificado recebido
+/**
+ * Remove do LinkedList e apaga elemento da memoria que possui a posição
+ * fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição a ter o elemento removido do LinkedList e apagado
+ *        da memória
+ */
 void linked_list_eraser_at(LinkedList* linked_list, int index);
 
-// remove da lista sem remover da memoria a refêrencia fornecida
+/**
+ * Remove do LinkedList sem apagar da memoria a refêrencia fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param value valor a ser removido do LinkedList sem ser apagado da
+ *        memória
+ */
 void linked_list_remove_by_reference(LinkedList* linked_list, void* value);
 
-// remove da lista sem remover da memoria o elemento que possui o id recebido
+/**
+ * Remove do LinkedList sem apagar elemento da memoria que possui a posição
+ * fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição a ter o elemento removido do LinkedList sem ser
+ *        apagado da memória
+ */
 void* linked_list_remove_at(LinkedList* linked_list, int index);
 
-/*
-Apaga o LinkedList sem apagar os elementos da memoria
-*/
+/**
+ * Apaga o LinkedList sem apagar os elementos da memoria
+ *
+ * @param linked_list instância do LinkedList
+ */
 void linked_list_free(LinkedList* linked_list);
 
-/*
-Apaga o LinkedList e os elementos da lista e da memoria
-*/
+/**
+ * Apaga o LinkedList e os elementos da lista e da memoria
+ *
+ * @param linked_list instância do LinkedList
+ */
 void linked_list_free_eraser(LinkedList* linked_list);
 
-/*
-Apaga o LinkedList e os elementos da lista e da memoria
-*/
+/**
+ * Apaga o LinkedList e os elementos da lista e da memoria
+ *
+ * @param linked_list instância do LinkedList
+ */
 void linked_list_free_eraser_destructor(LinkedList* linked_list, void (*destructor)(void*));
 
-/*
-Percorre cada elemento do LinkedList e passa o valor e
-posição para "callback"
-*/
+/**
+ * Percorre cada elemento do LinkedList e passa o valor e
+ * posição para "callback"
+
+ * @param linked_list instância do LinkedList
+ * @param callback função que receberá cada valor e posição
+ *        presente no LinkedList
+ */
 void linked_list_for_each(LinkedList* linked_list, void (*callback)(void*, int));
 
 #endif // LINKED_LIST_H_INCLUDED
