@@ -56,7 +56,8 @@ int main (int argc, const char* argv[]) {
     printf("%s\n", sub->c_str);
     printf("%d\n", sub->lenght);
     printf("%d\n", string_get_length_allocated(sub));
-    string_free(sub);
+    string_clear(sub);
+    free(sub);
 
     int sizeSplit = string_size_split(str, "e");
     printf("sizeSplit = %d\n", sizeSplit);
@@ -68,10 +69,12 @@ int main (int argc, const char* argv[]) {
     }
 
     for (i = 0; i < sizeSplit; i++) {
-        string_free(splitArray[i]);
+        string_clear(splitArray[i]);
+        free(splitArray[i]);
     }
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_STRICT_STRATEGY_REALLOCATED);
 
@@ -81,7 +84,8 @@ int main (int argc, const char* argv[]) {
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_HALF_STRATEGY_REALLOCATED);
 
@@ -91,7 +95,8 @@ int main (int argc, const char* argv[]) {
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_DOUBLE_STRATEGY_REALLOCATED);
 
@@ -101,19 +106,22 @@ int main (int argc, const char* argv[]) {
 
     printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     str = new_string_allocated("1234567", 9);
 
     printf("%d\n", string_get_length_allocated(str));
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     str = new_string_allocated("1234567", 3);
 
     printf("%d\n", string_get_length_allocated(str));
 
-    string_free(str);
+    string_clear(str);
+    free(str);
 
     return 0;
 }

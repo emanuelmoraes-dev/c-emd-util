@@ -14,115 +14,118 @@ typedef struct __st_linked_list {
     int size;
 } LinkedList;
 
-/*
-Cria um novo elemento vazio para o LinkedList
+/**
+ * Inicializa uma LinkedList vazia
+ *
+ * @param linked_list instância do LinkedList a ser inicializada
+ */
+void linked_list_init(LinkedList* linked_list);
 
-@return novo elemento vazio para o LinkedList
-*/
+/**
+ * Cria um novo elemento vazio para o LinkedList
+ *
+ * @return novo elemento vazio para o LinkedList
+ */
 LinkedListElement* new_element ();
 
-/*
-Cria uma nova lista vazia
-
-@return nova lista vazia
-*/
+/**
+ * Cria uma nova LinkedList vazia
+ *
+ * @return nova lista vazia
+ */
 LinkedList* new_linked_list();
 
-/*
-Adiciona valor no inicio do LinkedList
-
-@param linked_list instância do LinkedList
-@param value valor a ser adicionado no início do LinkedList
-*/
+/**
+ * Adiciona valor no inicio do LinkedList
+ *
+ * @param linked_list instância do LinkedList
+ * @param value valor a ser adicionado no início do LinkedList
+ */
 void linked_list_add_top(LinkedList* linked_list, void* value);
 
-/*
-Retorna o valor do início do LinkedList
-
-@param linked_list instância do LinkedList
-*/
+/**
+ * Retorna o valor do início do LinkedList
+ *
+ * @param linked_list instância do LinkedList
+ */
 void* linked_list_top(LinkedList* linked_list);
 
-/*
-Remove o elemento do início do LinkedList
-
-@param linked_list instância do LinkedList
-@return valor removido do início do LinkedList
-*/
+/**
+ * Remove o elemento do início do LinkedList
+ *
+ * @param linked_list instância do LinkedList
+ * @return valor removido do início do LinkedList
+ */
 void* linked_list_remove_top(LinkedList* linked_list);
 
-// Remove e apaga da memória elemento do linked_list_top da lista
-/*
-Remove da lista e apaga da memória o elemento do início do LinkedList
-
-@param linked_list instância do LinkedList
-*/
+/**
+ * Remove da lista e apaga da memória o elemento do início do LinkedList
+ *
+ * @param linked_list instância do LinkedList
+ */
 void linked_list_eraser_top(LinkedList* linked_list);
 
-// busca um elemento antes do elemento da lista que possui a mesma referencia fornecida
-/*
-Busca e retorna o elemento anterior ao elemento da lista que possui a mesma referência de "value"
-
-@param linked_list instância do LinkedList
-@param value referência do valor posterior ao valor que será retornado
-@return elemento anterior ao elemento que possui a referência recebida
-*/
+/**
+ * Busca e retorna o elemento anterior ao elemento da lista que possui a mesma referência de "value"
+ *
+ * @param linked_list instância do LinkedList
+ * @param value referência do valor posterior ao valor que será retornado
+ * @return elemento anterior ao elemento que possui a referência recebida
+ */
 LinkedListElement* linked_list_find_previous_by_reference(LinkedList* linked_list, void* value);
 
-// apaga da memoria o elemento que vem depois do elemento recebido
-/*
-Remove do LinkedList e apaga da memória o elemento posterior ao elemento recebido
-
-@param linked_list instância do LinkedList
-@param element elemento anterior ao elemento que será apagado
-*/
+/**
+ * Remove do LinkedList e apaga da memória o elemento posterior ao elemento recebido
+ *
+ * @param linked_list instância do LinkedList
+ * @param element elemento anterior ao elemento que será apagado
+ */
 void linked_list_eraser_next(LinkedList* linked_list, LinkedListElement* element);
 
-// remove da lista sem remover da memoria o elemento que vem depois do elemento recebido
-/*
-Remove do LinkedList sem apagar da memória o elemento posterior ao elemento recebido
-
-@param linked_list instância do LinkedList
-@param element elemento anterior ao elemento que será removido
-@return valor removido do LinkedList
-*/
+/**
+ * Remove do LinkedList sem apagar da memória o elemento posterior ao elemento recebido
+ *
+ * @param linked_list instância do LinkedList
+ * @param element elemento anterior ao elemento que será removido
+ * @return valor removido do LinkedList
+ */
 void* linked_list_remove_next(LinkedList* linked_list, LinkedListElement* element);
 
-/*
-Remove o LinkedList da memória sem remover seus elementos da memória, a partir de head
+/**
+ * Remove os elementos da lista, sem apagar os elementos do LinkedList da memória, a partir de head.
+ * Não apaga LinkedList da memória
+ *
+ * @param linked_list instância do LinkedList
+ * @param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+ */
+void linked_list_clear_by_head(LinkedList* linked_list, LinkedListElement* head);
 
-@param linked_list instância do LinkedList
-@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
-*/
-void linked_list_free_by_head(LinkedList* linked_list, LinkedListElement* head);
+/**
+ * Remove os elementos da lista e apaga os elementos do LinkedList da memória, a partir de head.
+ * Não apaga LinkedList da memória
+ *
+ * @param linked_list instância do LinkedList
+ * @param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+ */
+void linked_list_clear_eraser_by_head(LinkedList* linked_list, LinkedListElement* head);
 
-// apaga a lista e os elementos da lista da memoria a partir do head
-/*
-Remove o LinkedList da memória e remove seus elementos da memória, a partir de head
+/**
+ * Remove os elementos da lista e apaga os elementos do LinkedList da memória, utilizando destrutor,
+ * a partir de head. Não apaga LinkedList da memória
+ *
+ * @param linked_list instância do LinkedList
+ * @param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
+ * @param destructor destrutora para cada elemento do LinkedList
+ */
+void linked_list_clear_eraser_destructor_by_head(LinkedList* linked_list, LinkedListElement* head, void (*destructor)(void*));
 
-@param linked_list instância do LinkedList
-@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
-*/
-void linked_list_free_eraser_by_head(LinkedList* linked_list, LinkedListElement* head);
-
-// apaga a lista e os elementos são apagados por meio de função destrutora, a partir de head
-/*
-Remove o LinkedList da memória e remove seus elementos da memória, a partir de head, executando
-função destrutora para cada elemento elemento, após sua remoção
-
-@param linked_list instância do LinkedList
-@param head elemento que aponta para o primeiro elemento do LinkedList a ser removido
-@param destructor destrutora para cada elemento do LinkedList
-*/
-void linked_list_free_eraser_destructor_by_head(LinkedList* linked_list, LinkedListElement* head, void (*destructor)(void*));
-
-/*
-Busca um LinkedListElement di LinkedList que possui a posição fornecida
-
-@param linked_list instância do LinkedList
-@param index posição do elemento a ser buscado
-@return LinkedListElement* que possui a posição fornecida
-*/
+/**
+ * Busca um LinkedListElement di LinkedList que possui a posição fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição do elemento a ser buscado
+ * @return LinkedListElement* que possui a posição fornecida
+ */
 LinkedListElement* linked_list_find_element_by_index(LinkedList* linked_list, int index);
 
 /**
@@ -208,25 +211,28 @@ void linked_list_remove_by_reference(LinkedList* linked_list, void* value);
 void* linked_list_remove_at(LinkedList* linked_list, int index);
 
 /**
- * Apaga o LinkedList sem apagar os elementos da memoria
+ * Remove os elementos do LinkedList sem apagar os elementos da memoria.
+ * Não apaga LinkedList da memória
  *
  * @param linked_list instância do LinkedList
  */
-void linked_list_free(LinkedList* linked_list);
+void linked_list_clear(LinkedList* linked_list);
 
 /**
- * Apaga o LinkedList e os elementos da lista e da memoria
+ * Remove os elementos do LinkedList e apaga os elementos da memoria.
+ * Não apaga LinkedList da memória
  *
  * @param linked_list instância do LinkedList
  */
-void linked_list_free_eraser(LinkedList* linked_list);
+void linked_list_clear_eraser(LinkedList* linked_list);
 
 /**
- * Apaga o LinkedList e os elementos da lista e da memoria
+ * Remove os elementos do LinkedList e apaga os elementos da memoria, usando destrutor.
+ * Não apaga LinkedList da memória
  *
  * @param linked_list instância do LinkedList
  */
-void linked_list_free_eraser_destructor(LinkedList* linked_list, void (*destructor)(void*));
+void linked_list_clear_eraser_destructor(LinkedList* linked_list, void (*destructor)(void*));
 
 /**
  * Percorre cada elemento do LinkedList e passa o valor e

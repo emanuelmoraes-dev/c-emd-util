@@ -51,7 +51,7 @@ int STRING_HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght);
  *        desconsiderando o \0
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
-*/
+ */
 int STRING_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 
 /**
@@ -69,7 +69,44 @@ typedef struct __st_string {
 } String;
 
 /**
- * Construtor da string dinâmica
+ * Inicializador de string dinâmica
+ *
+ * String->min_extra = min_extra
+ * String->reallocate_strategy = reallocate_strategy
+ *
+ * @param str instância de String dinâmica
+ * @param s valor a ser copiado para String dinâmica
+ * @param min_length_allocated quantidade mínima que deve estar alocado
+ * @param min_extra valor extra mínimo na realocação da String
+ * @param reallocate_strategy estratégia para realocação
+ */
+void string_init_reallocate_strategy(String* str, const char* s, int min_length_allocated, int min_extra, StringReallocateStrategy* reallocate_strategy);
+
+/**
+ * Inicializador de string dinâmica
+ *
+ * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
+ * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ *
+ * @param str instância de String dinâmica
+ * @param s valor a ser copiado para String dinâmica
+ * @param min_length_allocated quantidade mínima que deve estar alocado
+ */
+void string_init_allocated(String* str, const char* s, int min_length_allocated);
+
+/**
+ * Inicializador de string dinâmica
+ *
+ * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
+ * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ *
+ * @param srr instância de String dinâmica
+ * @param s valor a ser copiado para String dinâmica
+ */
+void string_init(String* str, const char* s);
+
+/**
+ * Cria uma string dinâmica
  *
  * String->min_extra = min_extra
  * String->reallocate_strategy = reallocate_strategy
@@ -83,7 +120,7 @@ typedef struct __st_string {
 String* new_string_reallocate_strategy(const char* s, int min_length_allocated, int min_extra, StringReallocateStrategy* reallocate_strategy);
 
 /**
- * Construtor da string dinâmica
+ * Cria uma string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
  * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
@@ -91,11 +128,11 @@ String* new_string_reallocate_strategy(const char* s, int min_length_allocated, 
  * @param s valor a ser copiado para String dinâmica
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @return nova instância de String dinâmica
-*/
+ */
 String* new_string_allocated(const char* s, int min_length_allocated);
 
 /**
- * Construtor da string dinâmica
+ * Cria uma string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
  * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
@@ -142,7 +179,7 @@ short string_set_max_length_allocated(String* str, int length_allocated);
  * @param str String dinâmica
  * @param length_allocated quantidade exata que deve estar alocada
  * @return 1 se uma realocação ocorreu, 0 caso contrário
-*/
+ */
 short string_set_length_allocated(String* str, int length_allocated);
 
 /**
@@ -150,7 +187,7 @@ short string_set_length_allocated(String* str, int length_allocated);
  *
  * @param str instância da String dinâmica
  * @param s valor a ser atribuído a 'str'
-*/
+ */
 void string_set(String* str, const char* s);
 
 /**
@@ -162,11 +199,12 @@ void string_set(String* str, const char* s);
 void string_cat(String* str, const char* s);
 
 /**
- * Remove a String dinâmica da memória
+ * Apaga da memória os caracteres da String dinâmica.
+ * Não apaga String dinâmica da memória
  *
  * @param str instância da String dinâmica a ser removida
  */
-void string_free(String* str);
+void string_clear(String* str);
 
 /**
  * Altera uma String dinâmica para receber uma substring de outra
@@ -240,7 +278,7 @@ void string_replace(String* src, String* target, String* replace, String* value)
  *        já estar alocada
  * @param replace substring que será buscada
  * @param value valor que irá substituir "replace"
-*/
+ */
 void string_replace_all(String* src, String* target, String* replace, String* value);
 
 /**
@@ -253,7 +291,7 @@ void string_replace_all(String* src, String* target, String* replace, String* va
  *        Precisa já estar alocada
  * @param ignore_endl se 1, ignora quebras de linha
  * @return 1 se a operação for executada com sucesso. 0 caso contrário
-*/
+ */
 short string_read_full_line(FILE* file, String* target, short ignore_endl);
 
 #endif // DYNAMIC_STRING_H_INCLUDED

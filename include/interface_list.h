@@ -84,7 +84,7 @@
 /**
  * Busca a referência do elemento do LIST que possui a posição fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
@@ -95,7 +95,7 @@
 /**
  * Busca a referência do elemento do LIST que possui a referência fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param value referência do valor a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
@@ -106,7 +106,7 @@
 /**
  * Adiciona no final do LIST um valor
  *
- * @param varname instância do LIST que receberá o valor
+ * @param varname instância de LIST que receberá o valor
  * @param value valor a ser adicionado no final do LIST
  */
 #define LIST_ADD(varname, value) \
@@ -116,7 +116,7 @@
 /**
  * Adiciona um elemento no LIST na posicao informada
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
  */
@@ -127,7 +127,7 @@
 /**
  * Remove do LIST e apaga da memoria a refêrencia fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param value valor a ser removido do LIST e apagado da memória
  */
 #define LIST_ERASER_BY_REFERENCE(varname, value) \
@@ -138,7 +138,7 @@
  * Remove do LIST e apaga elemento da memoria que possui a posição
  * fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST e apagado
  *        da memória
  */
@@ -149,7 +149,7 @@
 /**
  * Remove do LIST sem apagar da memoria a refêrencia fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param value valor a ser removido do LIST sem ser apagado da
  *        memória
  */
@@ -161,7 +161,7 @@
  * Remove do LIST sem apagar elemento da memoria que possui a posição
  * fornecida
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST sem ser
  *        apagado da memória
  */
@@ -170,37 +170,40 @@
     array_list_remove_at(__##varname##_array_list, index)
 
 /**
- * Apaga o LIST sem apagar os elementos da memoria
+ * Remove os elementos de LIST sem apagar os elementos da memoria.
+ * Não apaga LIST da memória
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  */
-#define LIST_FREE(varname) \
-    __##varname##_linked_list != NULL ? linked_list_free(__##varname##_linked_list) : \
-    array_list_free(__##varname##_array_list)
+#define LIST_CLEAR(varname) \
+    __##varname##_linked_list != NULL ? linked_list_clear(__##varname##_linked_list) : \
+    array_list_clear(__##varname##_array_list)
 
 /**
- * Apaga o LIST e os elementos da lista e da memoria
+ * Remove os elementos de LIST e apaga os elementos da memoria.
+ * Não apaga LIST da memória
  *
- * @param varname instância do LISTA
+ * @param varname instância de LIST
  */
-#define LIST_FREE_ERASER(varname) \
-    __##varname##_linked_list != NULL ? linked_list_free_eraser(__##varname##_linked_list) : \
-    array_list_free_eraser(__##varname##_array_list)
+#define LIST_CLEAR_ERASER(varname) \
+    __##varname##_linked_list != NULL ? linked_list_clear_eraser(__##varname##_linked_list) : \
+    array_list_clear_eraser(__##varname##_array_list)
 
 /**
- * Apaga o LIST e os elementos da lista e da memoria
+ * Remove os elementos de LIST e apaga os elementos da memoria, usando destrutor.
+ * Não apaga LIST da memória
  *
- * @param varname instância do LIST
+ * @param varname instância de LIST
  */
-#define LIST_FREE_ERASER_DESTRUCTOR(varname, destructor) \
-    __##varname##_linked_list != NULL ? linked_list_free_eraser_destructor(__##varname##_linked_list, destructor) : \
-    array_list_free_eraser_destructor(__##varname##_array_list, destructor)
+#define LIST_CLEAR_ERASER_DESTRUCTOR(varname, destructor) \
+    __##varname##_linked_list != NULL ? linked_list_clear_eraser_destructor(__##varname##_linked_list, destructor) : \
+    array_list_clear_eraser_destructor(__##varname##_array_list, destructor)
 
 /**
  * Percorre cada elemento do LIST e passa o valor e
  * posição para "callback"
 
- * @param varname instância do LIST
+ * @param varname instância de LIST
  * @param callback função que receberá cada valor e posição
  *        presente no LIST
  */
