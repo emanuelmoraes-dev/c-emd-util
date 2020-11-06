@@ -9,10 +9,31 @@ typedef struct __st_linked_list_element {
 } LinkedListElement;
 
 typedef struct __st_linked_list {
-    LinkedListElement* head;
-    LinkedListElement* last;
+    // public
     int size;
+
+    // private
+    LinkedListElement* __head;
+    LinkedListElement* __last;
 } LinkedList;
+
+/**
+ * Obtém o head do LinkedList que aponta para o primeiro elemento da lista
+ *
+ * @param linked_list instância do LinkedList
+ * @return o head do LinkedList que aponta para o primeiro elemento da lista
+ */
+LinkedListElement* linked_list_head(LinkedList* linked_list);
+
+/**
+ * Obtém o último elemento do LinkedList. Se a lista estiver vazia, retorna-se
+ * o head
+ *
+ * @param linked_list instância do LinkedList
+ * @return o último elemento do LinkedList. Se a lista estiver vazia, retorna-se
+ *  o head
+ */
+LinkedListElement* linked_list_last(LinkedList* linked_list);
 
 /**
  * Inicializa uma LinkedList vazia
@@ -240,8 +261,10 @@ void linked_list_clear_eraser_destructor(LinkedList* linked_list, void (*destruc
 
  * @param linked_list instância do LinkedList
  * @param callback função que receberá cada valor e posição
- *        presente no LinkedList
+ *        presente no LinkedList. "callback" deve retornar
+ *        1 para continuar a iteração. 0 para que o comando
+ *        break seja executado
  */
-void linked_list_for_each(LinkedList* linked_list, void (*callback)(void*, int));
+void linked_list_for_each(LinkedList* linked_list, short (*callback)(void*, int));
 
 #endif // LINKED_LIST_H_INCLUDED

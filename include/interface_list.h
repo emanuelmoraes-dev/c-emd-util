@@ -205,7 +205,9 @@
 
  * @param varname instância de LIST
  * @param callback função que receberá cada valor e posição
- *        presente no LIST
+ *        presente no LinkedList. "callback" deve retornar
+ *        1 para continuar a iteração. 0 para que o comando
+ *        break seja executado
  */
 #define LIST_FOR_EACH(varname, callback) \
     __##varname##_linked_list != NULL ? linked_list_for_each(__##varname##_linked_list, callback) : \
