@@ -5,12 +5,12 @@ OBJ     = ./obj
 SRC     = ./src
 TESTS   = ./src/tests
 
-LIBS_FILES  = $(OBJ)/dynamic_string.o $(OBJ)/linked_list.o
+LIBS_FILES  = $(OBJ)/dynamic_string.o $(OBJ)/linked_list.o $(OBJ)/array_list.o
 TESTS_FILES = $(BIN)/test1
 
 CC    = gcc
 FLAGS = -O3 -Wall -std=c99
-LIBS  = -L $(LIB) -lm -ldys
+LIBS  = -L $(LIB) -lm -lcemdutil
 
 all: dirs libcemdutil $(TESTS_FILES)
 

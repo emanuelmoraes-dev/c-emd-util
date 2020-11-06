@@ -1,4 +1,5 @@
 #include <math.h>
+#include <string.h>
 #include "array_list.h"
 
 /**
@@ -10,7 +11,7 @@
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int size) {
+int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(int length_allocated, int size) {
     return size + 1;
 }
 
@@ -22,7 +23,7 @@ int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int size) {
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int size) {
+int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(int length_allocated, int size) {
     size++;
     int half = ceil(size / 2.0);
     return size + half;
@@ -36,7 +37,7 @@ int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int size) {
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, int size) {
+int ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int size) {
     length_allocated = MAX(1, length_allocated);
     return length_allocated*2;
 }
@@ -173,7 +174,7 @@ ArrayList* new_array_list(ArrayListType type) {
  * @param array_list instância do ArrayList
  * @return quantidade de espaço alocado para o ArrayList
  */
-size_t array_list_get_length_allocated(ArrayList* array_list) {
+int array_list_get_length_allocated(ArrayList* array_list) {
     return array_list->__length_allocated;
 }
 
@@ -201,7 +202,7 @@ void* __mfrealloc(void* __ptr, size_t __new_size, size_t __old_size) {
  * @param length_allocated quantidade mínima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_allocated) {
+short array_list_set_min_length_allocated(ArrayList* array_list, int length_allocated) {
     if (array_list->__length_allocated >= length_allocated)
         return 1;
 
@@ -221,7 +222,7 @@ short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_a
  * @param length_allocated quantidade máxima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_allocated) {
+short array_list_set_max_length_allocated(ArrayList* array_list, int length_allocated) {
     if (array_list->__length_allocated <= length_allocated || array_list->size >= length_allocated)
         return 1;
 
@@ -242,7 +243,7 @@ short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_a
  * @param length_allocated quantidade exata que deve estar alocada
  * @return 0 se uma realocação ocorreu
  */
-short array_list_set_length_allocated(ArrayList* array_list, size_t length_allocated) {
+short array_list_set_length_allocated(ArrayList* array_list, int length_allocated) {
     if (array_list->size >= length_allocated)
         return 1;
 
@@ -414,8 +415,8 @@ short array_list_remove_by_reference(ArrayList* array_list, void* value) {
  * @return referência removida do ArrayList
  */
 void* array_list_remove_at(ArrayList* array_list, int index) {
-    if (index < 0) return;
-    if (index >= array_list->size) return;
+    if (index < 0) return NULL;
+    if (index >= array_list->size) return NULL;
     void* value = array_list_find_by_index(array_list, index);
 
     int i;

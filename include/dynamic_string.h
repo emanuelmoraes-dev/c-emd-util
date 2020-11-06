@@ -18,7 +18,7 @@
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-typedef int StringReallocateStrategy(size_t length_allocated, int lenght);
+typedef int StringReallocateStrategy(int length_allocated, int lenght);
 
 /**
  * Cria uma estratégia de realocar apenas o espaço necessário pelo
@@ -30,7 +30,7 @@ typedef int StringReallocateStrategy(size_t length_allocated, int lenght);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int STRING_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int lenght);
+int STRING_STRICT_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 
 /**
  * É a estratégia de realocar adicionando a metade do tamanho da string
@@ -41,7 +41,7 @@ int STRING_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int lenght);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int STRING_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int lenght);
+int STRING_HALF_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 
 /**
  * É a estratégia de realocar o dobro do que foi alocado anteriormente
@@ -52,15 +52,15 @@ int STRING_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int lenght);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int STRING_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, int lenght);
+int STRING_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int lenght);
 
 /**
  * Struct que representa uma instância de uma String dinâmica
  */
 typedef struct __st_string {
     // public
-    size_t lenght; // Quantidade de caracteres da string
-    size_t min_extra; // Quantidade mínima de espaço extra na realocação da String
+    int lenght; // Quantidade de caracteres da string
+    int min_extra; // Quantidade mínima de espaço extra na realocação da String
     StringReallocateStrategy* reallocate_strategy; // Estratégia de realocação de espaço
 
     // private
@@ -154,7 +154,7 @@ String* new_string(const char* s);
  * @param str instância da String dinâmicas
  * @return quantidade de espaço alocado para a String dinâmica
  */
-size_t string_get_length_allocated(String* str);
+int string_get_length_allocated(String* str);
 
 /**
  * Informa a quantidade mínima de espaço que deve estar alocado
@@ -165,7 +165,7 @@ size_t string_get_length_allocated(String* str);
  * @param length_allocated quantidade mínima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short string_set_min_length_allocated(String* str, size_t length_allocated);
+short string_set_min_length_allocated(String* str, int length_allocated);
 
 /**
  * Informa a quantidade máxima de espaço que deve estar alocado
@@ -176,7 +176,7 @@ short string_set_min_length_allocated(String* str, size_t length_allocated);
  * @param length_allocated quantidade máxima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short string_set_max_length_allocated(String* str, size_t length_allocated);
+short string_set_max_length_allocated(String* str, int length_allocated);
 
 /**
  * Informa a quantidade exata que deve estar alocado para uma determinada
@@ -188,7 +188,7 @@ short string_set_max_length_allocated(String* str, size_t length_allocated);
  * @param length_allocated quantidade exata que deve estar alocada
  * @return 0 se uma realocação ocorreu
  */
-short string_set_length_allocated(String* str, size_t length_allocated);
+short string_set_length_allocated(String* str, int length_allocated);
 
 /**
  * Atribui novo valor para a String dinâmica

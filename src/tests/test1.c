@@ -41,19 +41,19 @@ int main (int argc, const char* argv[]) {
 
     string_set(str, "Meu Feijão com Arroz");
 
-    printf("%s\n", str->c_str);
+    printf("%s\n", string_c(str));
     printf("%d\n", str->lenght);
     printf("%d\n", string_get_length_allocated(str));
 
     string_cat(str, "oiujmnfghvbfteqaxdpzsu");
 
-    printf("%s\n", str->c_str);
+    printf("%s\n", string_c(str));
     printf("%d\n", str->lenght);
     printf("%d\n", string_get_length_allocated(str));
 
     String* sub = new_string("");
     string_sub(str, sub, 4, 30);
-    printf("%s\n", sub->c_str);
+    printf("%s\n", string_c(str));
     printf("%d\n", sub->lenght);
     printf("%d\n", string_get_length_allocated(sub));
     string_clear(sub);
@@ -65,7 +65,7 @@ int main (int argc, const char* argv[]) {
     string_split(str, splitArray, "e");
     int i;
     for (i = 0; i < sizeSplit; i++) {
-        printf("str = %s\n", splitArray[i]->c_str);
+        printf("str = %s\n", string_c(splitArray[i]));
     }
 
     for (i = 0; i < sizeSplit; i++) {
@@ -78,33 +78,33 @@ int main (int argc, const char* argv[]) {
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_STRICT_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_clear(str);
     free(str);
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_HALF_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_clear(str);
     free(str);
 
     str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_DOUBLE_STRATEGY_REALLOCATED);
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_cat(str, " World!");
 
-    printf("%s / %d / %d\n", str->c_str, str->lenght, string_get_length_allocated(str));
+    printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
     string_clear(str);
     free(str);

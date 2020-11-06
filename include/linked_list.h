@@ -4,12 +4,10 @@
 #include <stdlib.h>
 
 #define LINKED_LIST_FOR_EACH(it, linked_list) \
-    if (linked_list != NULL && linked_list_head(linked_list) != NULL) \
-        for (it = linked_list_head(linked_list)->next; it != NULL; it = it->next)
+    for (it = linked_list != NULL && linked_list_head(linked_list) != NULL ? linked_list_head(linked_list)->next : NULL; it != NULL; it = it->next)
 
 #define LINKED_LIST_FOR_EACH_PREVIOUS(it, linked_list) \
-    if (linked_list != NULL) \
-        for (it = linked_list_head(linked_list); it != NULL; it = it->next)
+    for (it = linked_list != NULL ? linked_list_head(linked_list) : NULL; it != NULL; it = it->next)
 
 typedef struct __st_linked_list_element {
     void* value;

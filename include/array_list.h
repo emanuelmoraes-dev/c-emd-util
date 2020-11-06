@@ -37,7 +37,7 @@ typedef struct __st_array_list_type {
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-typedef int ArrayListReallocateStrategy(size_t length_allocated, int lenght);
+typedef int ArrayListReallocateStrategy(int length_allocated, int lenght);
 
 /**
  * Cria uma estratégia de realocar apenas o espaço necessário pelo
@@ -48,7 +48,7 @@ typedef int ArrayListReallocateStrategy(size_t length_allocated, int lenght);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int size);
+int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(int length_allocated, int size);
 
 /**
  * É a estratégia de realocar adicionando a metade do tamanho do array
@@ -58,7 +58,7 @@ int ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, int size);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int size);
+int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(int length_allocated, int size);
 
 /**
  * É a estratégia de realocar o dobro do que foi alocado anteriormente
@@ -68,7 +68,7 @@ int ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, int size);
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-int ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, int size);
+int ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int size);
 
 /**
  * Struct que representa uma instância do ArrayList
@@ -174,7 +174,7 @@ ArrayList* new_array_list(ArrayListType type);
  * @param array_list instância do ArrayList
  * @return quantidade de espaço alocado para o ArrayList
  */
-size_t array_list_get_length_allocated(ArrayList* array_list);
+int array_list_get_length_allocated(ArrayList* array_list);
 
 /**
  * Informa a quantidade mínima de espaço que deve estar alocado
@@ -185,7 +185,7 @@ size_t array_list_get_length_allocated(ArrayList* array_list);
  * @param length_allocated quantidade mínima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_allocated);
+short array_list_set_min_length_allocated(ArrayList* array_list, int length_allocated);
 
 /**
  * Informa a quantidade máxima de espaço que deve estar alocado
@@ -196,7 +196,7 @@ short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_a
  * @param length_allocated quantidade máxima que deve estar alocada
  * @return 0 se uma realocação foi necessária
  */
-short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_allocated);
+short array_list_set_max_length_allocated(ArrayList* array_list, int length_allocated);
 
 /**
  * Informa a quantidade exata que deve estar alocado para um determinado
@@ -208,7 +208,7 @@ short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_a
  * @param length_allocated quantidade exata que deve estar alocada
  * @return 0 se uma realocação ocorreu
  */
-short array_list_set_length_allocated(ArrayList* array_list, size_t length_allocated);
+short array_list_set_length_allocated(ArrayList* array_list, int length_allocated);
 
 /**
  * Adiciona no final do ArrayList os valores presentes em "values"

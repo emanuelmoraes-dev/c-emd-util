@@ -35,7 +35,7 @@ LinkedListElement* linked_list_last(LinkedList* linked_list) {
     return linked_list->__last;
 }
 
-LinkedListElement* __linked_list_set_last(LinkedList* linked_list, LinkedListElement* last) {
+void __linked_list_set_last(LinkedList* linked_list, LinkedListElement* last) {
     linked_list->__last = last;
 }
 
