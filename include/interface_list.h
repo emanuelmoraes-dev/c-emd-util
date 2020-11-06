@@ -1,7 +1,9 @@
 #ifndef INTERFACE_LIST_H_INCLUDED
 #define INTERFACE_LIST_H_INCLUDED
 
-// ### CRIAÇÃO E ATRIBUIÇÃO DE VARIÁVEL DA INTERFACE LIST ###
+// ### CRIAÇÃO E ATRIBUIÇÃO DE VARIÁVEL DA INTERFACE LIST ###]
+
+#define LIST_NO_PREFIX
 
 /**
  * Declara LIST em parâmetro de função
