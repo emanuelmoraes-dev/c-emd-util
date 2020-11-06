@@ -11,6 +11,19 @@
 #define LIST_PARAM(varname) LinkedList* __##varname##_linked_list, ArrayList* __##varname##_array_list
 
 /**
+ * Passa LIST para LIST em parâmetro de função
+ *
+ * @param valuename nome da variável que possui LIST
+ */
+#define LIST_ARG(valuename) __##valuename##_linked_list, __##valuename##_array_list
+/**
+ * Passa LIST para LIST em parâmetro de função, fornecendo "prefix". Prefix pode ser, por exemplo, uma estrutura seguido por "." ou "->".
+ * Se não houver prefixo, basta passar LIST_NO_PREFIX
+ *
+ * @param valuename nome da variável que possui LIST
+ */
+#define LIST_ARG_PREFIX(prefix, valuename) prefix##__##valuename##_linked_list, prefix##__##valuename##_array_list
+/**
  * Passa LinkedList para LIST em parâmetro de função
  *
  * @param linked_list instância de LinkedList
