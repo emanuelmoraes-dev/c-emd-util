@@ -92,17 +92,18 @@ void __string_set_c(String* str, char* c_str) {
  * @param reallocate_strategy estratégia para realocação
  */
 void string_init_reallocate_strategy(String* str, const char* s, int min_length_allocated, int min_extra, StringReallocateStrategy* reallocate_strategy) {
+    if (s == NULL) s = "";
     str->min_extra = min_extra;
     str->reallocate_strategy = reallocate_strategy;
     str->lenght = strlen(s);
-    str->__length_allocated = 0;
+    str->__length_allocated = 1;
 
     while (str->__length_allocated <= str->lenght) {
         str->__length_allocated = str->reallocate_strategy(str->__length_allocated, str->lenght);
     }
 
-    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
     str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
+    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
     __string_set_c(str, (char*) malloc(sizeof(char) * str->__length_allocated));
     strcpy(string_c(str), s);
 }
@@ -118,12 +119,13 @@ void string_init_reallocate_strategy(String* str, const char* s, int min_length_
  * @param min_length_allocated quantidade mínima que deve estar alocado
  */
 void string_init_allocated(String* str, const char* s, int min_length_allocated) {
+    if (s == NULL) s = "";
     str->min_extra = STRING_DEFAULT_MIN_EXTRA;
     str->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED;
     str->lenght = strlen(s);
-    str->__length_allocated = 0;
-    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
+    str->__length_allocated = 1;
     str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
+    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
     __string_set_c(str, (char*) malloc(sizeof(char) * str->__length_allocated));
     strcpy(string_c(str), s);
 }
@@ -205,15 +207,17 @@ size_t string_get_length_allocated(String* str) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade mínima que deve estar alocada
- * @return 1 se uma realocação foi necessária, 0 caso contrário
+ * @return 0 se uma realocação foi necessária
  */
 short string_set_min_length_allocated(String* str, size_t length_allocated) {
     if (str->__length_allocated >= length_allocated)
-        return 0;
+        return 1;
 
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), sizeof(char) * length_allocated, sizeof(char) * str->__length_allocated));
+    size_t new_length = sizeof(char) * length_allocated;
+    size_t old_length = sizeof(char) * str->__length_allocated;
+    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
     str->__length_allocated = length_allocated;
-    return 1;
+    return 0;
 }
 
 /**
@@ -223,15 +227,17 @@ short string_set_min_length_allocated(String* str, size_t length_allocated) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade máxima que deve estar alocada
- * @return 1 se uma realocação foi necessária, 0 caso contrário
+ * @return 0 se uma realocação foi necessária
  */
 short string_set_max_length_allocated(String* str, size_t length_allocated) {
     if (str->__length_allocated <= length_allocated || str->lenght >= length_allocated)
-        return 0;
+        return 1;
 
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), sizeof(char) * length_allocated, sizeof(char) * str->__length_allocated));
+    size_t new_length = sizeof(char) * length_allocated;
+    size_t old_length = sizeof(char) * str->__length_allocated;
+    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
     str->__length_allocated = length_allocated;
-    return 1;
+    return 0;
 }
 
 /**
@@ -242,15 +248,17 @@ short string_set_max_length_allocated(String* str, size_t length_allocated) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade exata que deve estar alocada
- * @return 1 se uma realocação ocorreu, 0 caso contrário
+ * @return 0 se uma realocação ocorreu
  */
 short string_set_length_allocated(String* str, size_t length_allocated) {
     if (str->lenght >= length_allocated)
-        return 0;
+        return 1;
 
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), sizeof(char) * length_allocated, sizeof(char) * str->__length_allocated));
+    size_t new_length = sizeof(char) * length_allocated;
+    size_t old_length = sizeof(char) * str->__length_allocated;
+    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
     str->__length_allocated = length_allocated;
-    return 1;
+    return 0;
 }
 
 /**
@@ -261,16 +269,20 @@ short string_set_length_allocated(String* str, size_t length_allocated) {
  */
 void string_set(String* str, const char* s) {
     str->lenght = strlen(s);
-    int flag = 0;
+    short flag = 0;
+    int length_allocated = str->__length_allocated;
 
-    while (str->__length_allocated <= str->lenght) {
-        str->__length_allocated = str->reallocate_strategy(str->__length_allocated, str->lenght);
+    while (length_allocated <= str->lenght) {
+        length_allocated = str->reallocate_strategy(length_allocated, str->lenght);
         flag = 1;
     }
 
     if (flag) {
-        str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
-        __string_set_c(str, (char*) __mfrealloc(string_c(str), sizeof(char) * str->__length_allocated, sizeof(char) * str->__length_allocated));
+        length_allocated = MAX(length_allocated, str->lenght + str->min_extra + 1);
+        size_t new_length = sizeof(char) * length_allocated;
+        size_t old_length = sizeof(char) * str->__length_allocated;
+        __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
+        str->__length_allocated = length_allocated;
     }
 
     strcpy(string_c(str), s);
@@ -313,16 +325,15 @@ void string_clear(String* str) {
  *        já estar alocada. Não pode ser a mesma instância de str
  * @param start posição inicial da substring
  * @param end posição final da substring (não incluso)
- * @return 1 se executado com sucesso, 0 caso contrário
  */
-short string_sub(String* str, String* target, int start, int end) {
+void string_sub(String* str, String* target, int start, int end) {
     if (str == target)
-        return 0;
+        exit(1);
 
     int len = strlen(string_c(str));
 
     if (len < end || start >= end)
-        return 0;
+        exit(1);
 
     int len_sub = end - start;
 
@@ -335,7 +346,6 @@ short string_sub(String* str, String* target, int start, int end) {
 
     string_c(target)[len_sub] = '\0';
     target->lenght = len_sub;
-    return 1;
 }
 
 /**
@@ -390,6 +400,8 @@ void string_split(String* str, String* target[], const char* sep) {
 
     if (str->lenght > 0)
         target[0] = new_string("");
+    else
+        return;
 
     int i;
     String* sub = new_string_allocated("", len_sep + 1);
@@ -419,19 +431,17 @@ void string_split(String* str, String* target[], const char* sep) {
 }
 
 /**
- * Retorna 1 se existir uma substring igual a "target". 0 caso
- * contrário
+ * Busca a primeira posição da substring na String dinâmica
  *
  * @param target substring que será buscada
- * @return 1 se existir uma substring igual a "value". 0 caso
- *         contrário
+ * @return primeira posição da substring na String dinâmica. -1 se não for encontrado
  */
-short string_find_sub(String* src, String* value) {
+int string_find_sub(String* src, String* value) {
     if (value->lenght == 0)
         return 1;
 
     String* verify = new_string_allocated("", value->lenght + 1);
-    short finded = 0;
+    short index = -1;
 
     int i = 0;
     while (i < src->lenght) {
@@ -441,7 +451,7 @@ short string_find_sub(String* src, String* value) {
         string_sub(src, verify, i, value->lenght);
 
         if (strcmp(string_c(verify), string_c(value)) == 0) {
-            finded = 1;
+            index = i;
             break;
         }
     }
@@ -449,7 +459,7 @@ short string_find_sub(String* src, String* value) {
     string_clear(verify);
     free(verify);
 
-    return finded;
+    return index;
 }
 
 /**
@@ -560,8 +570,8 @@ void __init_read_line_cache(struct __ReadLineCache* cache) {
 }
 
 short __read_line(char* buffer, size_t size, FILE* file, short ignore_endl, struct __ReadLineCache* cache) {
-    short NO_INPUT = 0;
-    short OK = 1;
+    short OK = 0;
+    short NO_INPUT = 1;
     short TOO_LONG = 2;
     short SMALL_BUFFER = 3;
 
@@ -635,11 +645,11 @@ short __read_line(char* buffer, size_t size, FILE* file, short ignore_endl, stru
  * @param target string dinâmica que irá receber o conteúdo da linha.
  *        Precisa já estar alocada
  * @param ignore_endl se 1, ignora quebras de linha
- * @return 1 se a operação for executada com sucesso. 0 caso contrário
+ * @return 0 se a operação for executada com sucesso
  */
 short string_read_full_line(FILE* file, String* target, short ignore_endl) {
-    short NO_INPUT = 0;
-    short OK = 1;
+    short OK = 0;
+    short NO_INPUT = 1;
 
     short status = OK;
     struct __ReadLineCache cache;

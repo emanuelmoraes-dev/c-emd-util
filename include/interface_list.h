@@ -93,15 +93,15 @@
     array_list_find_by_index(__##varname##_array_list, index)
 
 /**
- * Busca a referência do elemento do LIST que possui a referência fornecida
+ * Busca a posição no LIST da referência fornecida
  *
  * @param varname instância de LIST
- * @param value referência do valor a ser buscado
- * @return a referência do valor buscado. NULL caso não seja encontrado
+ * @param value referência a ser buscada
+ * @return posição na LIST da referência. -1 se não for encontrada
  */
-#define LIST_FIND_BY_REFERENCE(varname, value) \
-    __##varname##_linked_list != NULL ? linked_list_find_by_reference(__##varname##_linked_list, value) : \
-    array_list_find_by_reference(__##varname##_array_list, value)
+#define LIST_FIND_INDEX_BY_REFERENCE(varname, value) \
+    __##varname##_linked_list != NULL ? linked_list_find_index_by_reference(__##varname##_linked_list, value) : \
+    array_list_find_index_by_reference(__##varname##_array_list, value)
 
 /**
  * Adiciona no final do LIST um valor
@@ -129,6 +129,7 @@
  *
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST e apagado da memória
+ * @return 0 se a referência foi encontrada, removida de LIST e apagada da memória
  */
 #define LIST_ERASER_BY_REFERENCE(varname, value) \
     __##varname##_linked_list != NULL ? linked_list_eraser_by_reference(__##varname##_linked_list, value) : \
@@ -152,6 +153,7 @@
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST sem ser apagado da
  *        memória
+ * @return 0 se a referência foi encontrada e removida de LIST
  */
 #define LIST_REMOVE_BY_REFERENCE(varname, value) \
     __##varname##_linked_list != NULL ? linked_list_remove_by_reference(__##varname##_linked_list, value) : \
@@ -164,6 +166,7 @@
  * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST sem ser
  *        apagado da memória
+ * @return referência removida de LIST
  */
 #define LIST_REMOVE_AT(varname, index) \
     __##varname##_linked_list != NULL ? linked_list_remove_at(__##varname##_linked_list, index) : \

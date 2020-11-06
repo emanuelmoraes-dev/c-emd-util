@@ -3,6 +3,14 @@
 
 #include <stdlib.h>
 
+#define LINKED_LIST_FOR_EACH(it, linked_list) \
+    if (linked_list != NULL && linked_list_head(linked_list) != NULL) \
+        for (it = linked_list_head(linked_list)->next; it != NULL; it = it->next)
+
+#define LINKED_LIST_FOR_EACH_PREVIOUS(it, linked_list) \
+    if (linked_list != NULL) \
+        for (it = linked_list_head(linked_list); it != NULL; it = it->next)
+
 typedef struct __st_linked_list_element {
     void* value;
     struct __st_linked_list_element* next;
@@ -87,6 +95,15 @@ void* linked_list_remove_top(LinkedList* linked_list);
 void linked_list_eraser_top(LinkedList* linked_list);
 
 /**
+ * Adiciona um valor no LinkedList após o elemento informado
+ *
+ * @param linked_list instância do LinkedList
+ * @param before elemento anterior ao elemento a ser adicionado
+ * @param value valor a ser adicionado
+ */
+void linked_list_add_next(LinkedList* linked_list, LinkedListElement* before, void* value);
+
+/**
  * Busca e retorna o elemento anterior ao elemento da lista que possui a mesma referência de "value"
  *
  * @param linked_list instância do LinkedList
@@ -169,13 +186,13 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
 void* linked_list_find_by_index(LinkedList* array, int index);
 
 /**
- * Busca a referência do elemento do LinkedList que possui a referência fornecida
+ * Busca a posição no LinkedList da referência fornecida
  *
  * @param linked_list instância do LinkedList
- * @param value referência do valor a ser buscado
- * @return a referência do valor buscado. NULL caso não seja encontrado
+ * @param value referência a ser buscada
+ * @return posição na lista da referência. -1 se não for encontrada
  */
-void* linked_list_find_by_reference(LinkedList* array, void* value);
+int linked_list_find_index_by_reference(LinkedList* array, void* value);
 
 /**
  * Adiciona no final do LinkedList um valor
@@ -199,8 +216,9 @@ void linked_list_add_at(LinkedList* linked_list, void* value, int index);
  *
  * @param linked_list instância do LinkedList
  * @param value valor a ser removido do LinkedList e apagado da memória
+ * @return 0 se a referência foi encontrada, removida do LinkedList e apagada da memória
  */
-void linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
+short linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Remove do LinkedList e apaga elemento da memoria que possui a posição
@@ -218,8 +236,9 @@ void linked_list_eraser_at(LinkedList* linked_list, int index);
  * @param linked_list instância do LinkedList
  * @param value valor a ser removido do LinkedList sem ser apagado da
  *        memória
+ * @return 0 se a referência foi encontrada e removida do LinkedList
  */
-void linked_list_remove_by_reference(LinkedList* linked_list, void* value);
+short linked_list_remove_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Remove do LinkedList sem apagar elemento da memoria que possui a posição
@@ -228,6 +247,7 @@ void linked_list_remove_by_reference(LinkedList* linked_list, void* value);
  * @param linked_list instância do LinkedList
  * @param index posição a ter o elemento removido do LinkedList sem ser
  *        apagado da memória
+ * @return referência removida do LinkedList
  */
 void* linked_list_remove_at(LinkedList* linked_list, int index);
 

@@ -65,7 +65,7 @@ typedef struct __st_string {
 
     // private
     char* __c_str; // String e formato C
-    size_t __length_allocated; // Espaço alocado na memória
+    int __length_allocated; // Espaço alocado na memória
 } String;
 
 /**
@@ -163,7 +163,7 @@ size_t string_get_length_allocated(String* str);
  *
  * @param str String dinâmica
  * @param length_allocated quantidade mínima que deve estar alocada
- * @return 1 se uma realocação foi necessária, 0 caso contrário
+ * @return 0 se uma realocação foi necessária
  */
 short string_set_min_length_allocated(String* str, size_t length_allocated);
 
@@ -174,7 +174,7 @@ short string_set_min_length_allocated(String* str, size_t length_allocated);
  *
  * @param str String dinâmica
  * @param length_allocated quantidade máxima que deve estar alocada
- * @return 1 se uma realocação foi necessária, 0 caso contrário
+ * @return 0 se uma realocação foi necessária
  */
 short string_set_max_length_allocated(String* str, size_t length_allocated);
 
@@ -186,7 +186,7 @@ short string_set_max_length_allocated(String* str, size_t length_allocated);
  *
  * @param str String dinâmica
  * @param length_allocated quantidade exata que deve estar alocada
- * @return 1 se uma realocação ocorreu, 0 caso contrário
+ * @return 0 se uma realocação ocorreu
  */
 short string_set_length_allocated(String* str, size_t length_allocated);
 
@@ -223,9 +223,8 @@ void string_clear(String* str);
  *        já estar alocada. Não pode ser a mesma instância de str
  * @param start posição inicial da substring
  * @param end posição final da substring (não incluso)
- * @return 1 se executado com sucesso, 0 caso contrário
  */
-short string_sub(String* str, String* target, int start, int end);
+void string_sub(String* str, String* target, int start, int end);
 
 /**
  * Retorna o tamanho do array necessário para armazenar
@@ -252,14 +251,12 @@ int string_size_split(String* str, const char* sep);
 void string_split(String* str, String* target[], const char* sep);
 
 /**
- * Retorna 1 se existir uma substring igual a "target". 0 caso
- * contrário
+ * Busca a primeira posição da substring na String dinâmica
  *
  * @param target substring que será buscada
- * @return 1 se existir uma substring igual a "value". 0 caso
- *         contrário
+ * @return primeira posição da substring na String dinâmica. -1 se não for encontrado
  */
-short string_find_sub(String* src, String* target);
+int string_find_sub(String* src, String* target);
 
 /**
  * Atribui em "target" uma string dinâmica na qual a primeira substring
@@ -298,7 +295,7 @@ void string_replace_all(String* src, String* target, String* replace, String* va
  * @param target string dinâmica que irá receber o conteúdo da linha.
  *        Precisa já estar alocada
  * @param ignore_endl se 1, ignora quebras de linha
- * @return 1 se a operação for executada com sucesso. 0 caso contrário
+ * @return 0 se a operação for executada com sucesso
  */
 short string_read_full_line(FILE* file, String* target, short ignore_endl);
 
