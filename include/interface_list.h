@@ -79,6 +79,51 @@
     __##varname##_linked_list = NULL;\
     __##varname##_array_list = value
 
+/**
+ * Declara LIST
+ *
+ * @param varname nome da variável a ser criada
+ * @param valuename nome da variável que será atribuída na variável criada
+ */
+#define LIST_DECLARE(varname) \
+    LinkedList* __##varname##_linked_list;\
+    ArrayList* __##varname##_array_list
+
+/**
+ * Atribui em LIST um LIST, fornecendo "prefix". Prefix pode ser, por exemplo, uma estrutura seguido por "." ou "->".
+ * Se não houver prefixo, basta passar LIST_NO_PREFIX
+ *
+ * @param prefix_varname prefixo de "varname"
+ * @param varname nome da variável que terá seu valor alterado
+ * @param prefix_valuename prefixo de "valuename"
+ * @param valuename nome da variável que será atribuída em "varname"
+ */
+#define LIST_SET_PREFIX(prefix_varname, varname, prefix_valuename, valuename) \
+    prefix_varname##__##varname##_linked_list = prefix_valuename##__##valuename##_linked_list;\
+    prefix_varname##__##varname##_array_list = prefix_valuename##__##valuename##_array_list
+/**
+ * Atribui em LIST um LinkedList*, fornecendo um "prefix". Prefix pode ser, por exemplo, uma estrutura seguido por "." ou "->".
+ * Se não houver prefixo, basta passar LIST_NO_PREFIX
+ *
+ * @param prefix prefixo de "varname"
+ * @param varname nome da variável que terá seu valor alterado
+ * @param value valor do tipo LinkedList* a ser atribuido na variável "varname"
+ */
+#define LIST_SET_PREFIX_LINKED_LIST(prefix, varname, value) \
+    prefix##__##varname##_linked_list = value;\
+    prefix##__##varname##_array_list = NULL
+/**
+ * Atribui em LIST um ArrayList*, fornecendo um "prefix". Prefix pode ser, por exemplo, uma estrutura seguido por "." ou "->".
+ * Se não houver prefixo, basta passar LIST_NO_PREFIX
+ *
+ * @param prefix prefixo de "varname"
+ * @param varname nome da variável que terá seu valor alterado
+ * @param value valor do tipo ArrayList* a ser atribuido na variável "varname"
+ */
+#define LIST_SET_PREFIX_ARRAY_LIST(prefix, varname, value) \
+    prefix##__##varname##_linked_list = NULL;\
+    prefix##__##varname##_array_list = value
+
 // ### MÉTODOS ###
 
 /**
