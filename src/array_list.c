@@ -433,9 +433,10 @@ void* array_list_remove_at(ArrayList* array_list, int index) {
  * Remove os elementos do ArrayList sem apagar os elementos da memoria.
  * Não apaga ArrayList da memória
  *
- * @param array_list instância do ArrayList
+ * @param __array_list instância do ArrayList
  */
-void array_list_clear(ArrayList* array_list) {
+void array_list_clear(void* __array_list) {
+    ArrayList* array_list = (ArrayList*)__array_list;
     array_list->size = 0;
     array_list->__length_allocated = 0;
     __array_list_set_pointer(array_list, NULL);
@@ -445,9 +446,10 @@ void array_list_clear(ArrayList* array_list) {
  * Remove os elementos do ArrayList e apaga os elementos da memoria.
  * Não apaga ArrayList da memória
  *
- * @param array_list instância do ArrayList
+ * @param __array_list instância do ArrayList
  */
-void array_list_clear_eraser(ArrayList* array_list) {
+void array_list_clear_eraser(void* __array_list) {
+    ArrayList* array_list = (ArrayList*)__array_list;
     int i;
     for (i = array_list->size - 1; i >= 0; i--)
         array_list_eraser_at(array_list, i);
@@ -465,6 +467,39 @@ void array_list_clear_eraser_destructor(ArrayList* array_list, void (*destructor
         void* value = array_list_remove_at(array_list, i);
         destructor(value);
     }
+}
+
+/**
+ * Remove os elementos do ArrayList sem apagar os elementos da memoria.
+ * Apaga ArrayList da memória
+ *
+ * @param __array_list instância do ArrayList
+ */
+void array_list_free(void* __array_list) {
+    array_list_clear(__array_list);
+    free(__array_list);
+}
+
+/**
+ * Remove os elementos do ArrayList e apaga os elementos da memoria.
+ * Apaga ArrayList da memória
+ *
+ * @param __array_list instância do ArrayList
+ */
+void array_list_free_eraser(void* __array_list) {
+    array_list_clear_eraser(__array_list);
+    free(__array_list);
+}
+
+/**
+ * Remove os elementos do ArrayList e apaga os elementos da memoria, usando destrutor.
+ * Apaga ArrayList da memória
+ *
+ * @param array_list instância do ArrayList
+ */
+void array_list_free_eraser_destructor(ArrayList* array_list, void (*destructor)(void*)) {
+    array_list_clear_eraser_destructor(array_list, destructor);
+    free(array_list);
 }
 
 /**
