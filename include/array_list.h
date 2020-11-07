@@ -301,7 +301,7 @@ void* array_list_remove_at(ArrayList* array_list, int index);
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_clear(void* __array_list);
+void array_list_clear(void* _array_list);
 
 /**
  * Remove os elementos do ArrayList e apaga os elementos da memoria.
@@ -309,7 +309,7 @@ void array_list_clear(void* __array_list);
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_clear_eraser(void* __array_list);
+void array_list_clear_eraser(void* _array_list);
 
 /**
  * Remove os elementos do ArrayList e apaga os elementos da memoria, usando destrutor.
@@ -325,7 +325,7 @@ void array_list_clear_eraser_destructor(ArrayList* array_list, void (*destructor
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_free(void* __array_list);
+void array_list_free(void* _array_list);
 
 /**
  * Remove os elementos do ArrayList e apaga os elementos da memoria.
@@ -333,7 +333,7 @@ void array_list_free(void* __array_list);
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_free_eraser(void* __array_list);
+void array_list_free_eraser(void* _array_list);
 
 /**
  * Remove os elementos do ArrayList e apaga os elementos da memoria, usando destrutor.

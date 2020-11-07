@@ -408,8 +408,8 @@ void* linked_list_remove_at(LinkedList* linked_list, int index) {
  *
  * @param __linked_list instância do LinkedList
  */
-void linked_list_clear(void* __linked_list) {
-    LinkedList* linked_list = (LinkedList*) __linked_list;
+void linked_list_clear(void* _linked_list) {
+    LinkedList* linked_list = (LinkedList*) _linked_list;
     linked_list_clear_by_head(linked_list, linked_list_head(linked_list));
 }
 
@@ -419,8 +419,8 @@ void linked_list_clear(void* __linked_list) {
  *
  * @param __linked_list instância do LinkedList
  */
-void linked_list_clear_eraser(void* __linked_list) {
-    LinkedList* linked_list = (LinkedList*) __linked_list;
+void linked_list_clear_eraser(void* _linked_list) {
+    LinkedList* linked_list = (LinkedList*) _linked_list;
     linked_list_clear_eraser_by_head(linked_list, linked_list_head(linked_list));
 }
 
@@ -440,9 +440,9 @@ void linked_list_clear_eraser_destructor(LinkedList* linked_list, void (*destruc
  *
  * @param __linked_list instância do LinkedList
  */
-void linked_list_free(void* __linked_list) {
-    linked_list_clear(__linked_list);
-    free(__linked_list);
+void linked_list_free(void* _linked_list) {
+    linked_list_clear(_linked_list);
+    free(_linked_list);
 }
 
 /**
@@ -451,9 +451,9 @@ void linked_list_free(void* __linked_list) {
  *
  * @param __linked_list instância do LinkedList
  */
-void linked_list_free_eraser(void* __linked_list) {
-    linked_list_clear_eraser(__linked_list);
-    free(__linked_list);
+void linked_list_free_eraser(void* _linked_list) {
+    linked_list_clear_eraser(_linked_list);
+    free(_linked_list);
 }
 
 /**

@@ -9,10 +9,10 @@
  * @param __old_size atual tamanho para o ponteiro
  * @return novo ponteiro realocado
  */
-void* __mfrealloc(void* __ptr, size_t __new_size, size_t __old_size) {
-    void* ptr = malloc(__new_size);
-    memcpy(ptr, __ptr, MIN(__old_size, __new_size));
-    free(__ptr);
+void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
+    void* ptr = malloc(_new_size);
+    memcpy(ptr, _ptr, MIN(_old_size, _new_size));
+    free(_ptr);
     return ptr;
 }
 
@@ -309,8 +309,8 @@ void string_cat(String* str, const char* s) {
  *
  * @param __str instância da String dinâmica a ser removida
  */
-void string_clear(void* __str) {
-    String* str = (String*) __str;
+void string_clear(void* _str) {
+    String* str = (String*) _str;
     str->__length_allocated = 0;
     str->lenght = 0;
     free(string_c(str));
@@ -323,9 +323,9 @@ void string_clear(void* __str) {
  *
  * @param __str instância da String dinâmica a ser removida
  */
-void string_free(void* __str) {
-    string_clear(__str);
-    free(__str);
+void string_free(void* _str) {
+    string_clear(_str);
+    free(_str);
 }
 
 /**

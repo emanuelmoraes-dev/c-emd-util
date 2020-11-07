@@ -212,7 +212,7 @@ void string_cat(String* str, const char* s);
  *
  * @param __str instância da String dinâmica a ser removida
  */
-void string_clear(void* __str);
+void string_clear(void* _str);
 
 /**
  * Apaga da memória os caracteres da String dinâmica.
@@ -220,7 +220,7 @@ void string_clear(void* __str);
  *
  * @param __str instância da String dinâmica a ser removida
  */
-void string_free(void* __str);
+void string_free(void* _str);
 
 /**
  * Altera uma String dinâmica para receber uma substring de outra

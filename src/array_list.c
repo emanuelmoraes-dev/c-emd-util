@@ -186,10 +186,10 @@ int array_list_get_length_allocated(ArrayList* array_list) {
  * @param __old_size atual tamanho para o ponteiro
  * @return novo ponteiro realocado
  */
-void* __mfrealloc(void* __ptr, size_t __new_size, size_t __old_size) {
-    void* ptr = malloc(__new_size);
-    memcpy(ptr, __ptr, MIN(__old_size, __new_size));
-    free(__ptr);
+void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
+    void* ptr = malloc(_new_size);
+    memcpy(ptr, _ptr, MIN(_old_size, _new_size));
+    free(_ptr);
     return ptr;
 }
 
@@ -435,8 +435,8 @@ void* array_list_remove_at(ArrayList* array_list, int index) {
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_clear(void* __array_list) {
-    ArrayList* array_list = (ArrayList*)__array_list;
+void array_list_clear(void* _array_list) {
+    ArrayList* array_list = (ArrayList*)_array_list;
     array_list->size = 0;
     array_list->__length_allocated = 0;
     __array_list_set_pointer(array_list, NULL);
@@ -448,8 +448,8 @@ void array_list_clear(void* __array_list) {
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_clear_eraser(void* __array_list) {
-    ArrayList* array_list = (ArrayList*)__array_list;
+void array_list_clear_eraser(void* _array_list) {
+    ArrayList* array_list = (ArrayList*)_array_list;
     int i;
     for (i = array_list->size - 1; i >= 0; i--)
         array_list_eraser_at(array_list, i);
@@ -475,9 +475,9 @@ void array_list_clear_eraser_destructor(ArrayList* array_list, void (*destructor
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_free(void* __array_list) {
-    array_list_clear(__array_list);
-    free(__array_list);
+void array_list_free(void* _array_list) {
+    array_list_clear(_array_list);
+    free(_array_list);
 }
 
 /**
@@ -486,9 +486,9 @@ void array_list_free(void* __array_list) {
  *
  * @param __array_list instância do ArrayList
  */
-void array_list_free_eraser(void* __array_list) {
-    array_list_clear_eraser(__array_list);
-    free(__array_list);
+void array_list_free_eraser(void* _array_list) {
+    array_list_clear_eraser(_array_list);
+    free(_array_list);
 }
 
 /**
