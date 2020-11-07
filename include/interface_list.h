@@ -1,6 +1,13 @@
 #ifndef INTERFACE_LIST_H_INCLUDED
 #define INTERFACE_LIST_H_INCLUDED
 
+// ### CRIAÇÃO DE DESTRUTORES ###
+
+#define LIST_CREATE_DESTRUCTOR(fn_name, destructor1, destructor2) \
+    void fn_name (void* value) {\
+        destructor1(value, destructor2);\
+    }
+
 // ### CRIAÇÃO E ATRIBUIÇÃO DE VARIÁVEL DA INTERFACE LIST ###
 
 /**
