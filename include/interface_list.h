@@ -128,6 +128,17 @@
     array_list_get_by_index(varname##_array_list__, index)
 
 /**
+ * Atualiza o valor do elemento do LIST que possui a posição fornecida
+ *
+ * @param varname instância de LIST
+ * @param index posição do alemento a ser atualizado
+ * @param value valor a ser atribuído
+ */
+#define LIST_SET_BY_INDEX(varname, index, value) \
+    varname##_linked_list__ != NULL ? linked_list_set_by_index(varname##_linked_list__, index, value) : \
+    array_list_set_by_index(varname##_array_list__, index, value)
+
+/**
  * Busca a posição no LIST da referência fornecida
  *
  * @param varname instância de LIST
@@ -292,6 +303,16 @@
  */
 #define LIST_REF_GET_BY_INDEX \
     varname##_linked_list__ != NULL ? linked_list_get_by_index : array_list_get_by_index
+
+/**
+ * Atualiza o valor do elemento do LIST que possui a posição fornecida
+ *
+ * @param varname instância de LIST
+ * @param index posição do alemento a ser atualizado
+ * @param value valor a ser atribuído
+ */
+#define LIST_REF_SET_BY_INDEX \
+    varname##_linked_list__ != NULL ? linked_list_set_by_index : array_list_set_by_index
 
 /**
  * Busca a posição no LIST da referência fornecida

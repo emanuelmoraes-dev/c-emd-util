@@ -181,7 +181,16 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_get_by_index(LinkedList* array, int index);
+void* linked_list_get_by_index(LinkedList* linked_list, int index);
+
+/**
+ * Atualiza o valor do elemento do LinkedList que possui a posição fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição do alemento a ser atualizado
+ * @param value valor a ser atribuído
+ */
+void linked_list_set_by_index(LinkedList* linked_list, int index, void* value);
 
 /**
  * Busca a posição no LinkedList da referência fornecida
@@ -190,7 +199,7 @@ void* linked_list_get_by_index(LinkedList* array, int index);
  * @param value referência a ser buscada
  * @return posição na lista da referência. -1 se não for encontrada
  */
-int linked_list_find_index_by_reference(LinkedList* array, void* value);
+int linked_list_find_index_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Adiciona no final do LinkedList um valor

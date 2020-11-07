@@ -270,10 +270,10 @@ void array_list_add_all(ArrayList* array_list, void* values, int size) {
 // ### implements interface_list.h ###
 
 /**
- * Busca a referência do elemento do ArrayList que possui a posição fornecida
+ * Obtém a referência do elemento do ArrayList que possui a posição fornecida
  *
  * @param array_list instância do ArrayList
- * @param index posição do alemento a ser buscado
+ * @param index posição do alemento
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
 void* array_list_get_by_index(ArrayList* array_list, int index) {
@@ -282,6 +282,17 @@ void* array_list_get_by_index(ArrayList* array_list, int index) {
         if (i == index)
             return array_list->type.get(array_list_pointer(array_list), i);
     return NULL;
+}
+
+/**
+ * Atualiza o valor do elemento do ArrayList que possui a posição fornecida
+ *
+ * @param array_list instância do ArrayList
+ * @param index posição do elemento a ser atualizado
+ * @param value valor a ser atribuído
+ */
+void array_list_set_by_index(ArrayList* array_list, int index, void* value) {
+    array_list->type.set(array_list_pointer(array_list), index, value);
 }
 
 /**

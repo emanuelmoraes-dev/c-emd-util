@@ -290,6 +290,18 @@ void* linked_list_get_by_index(LinkedList* linked_list, int index) {
 }
 
 /**
+ * Atualiza o valor do elemento do LinkedList que possui a posição fornecida
+ *
+ * @param linked_list instância do LinkedList
+ * @param index posição do alemento a ser atualizado
+ * @param value valor a ser atribuído
+ */
+void linked_list_set_by_index(LinkedList* linked_list, int index, void* value) {
+    LinkedListElement* element = linked_list_find_element_by_index(linked_list, index);
+    element->value = value;
+}
+
+/**
  * Busca a posição no LinkedList da referência fornecida
  *
  * @param linked_list instância do LinkedList
