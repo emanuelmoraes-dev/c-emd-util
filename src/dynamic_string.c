@@ -307,13 +307,25 @@ void string_cat(String* str, const char* s) {
  * Apaga da memória os caracteres da String dinâmica.
  * Não apaga String dinâmica da memória
  *
- * @param str instância da String dinâmica a ser removida
+ * @param __str instância da String dinâmica a ser removida
  */
-void string_clear(String* str) {
+void string_clear(void* __str) {
+    String* str = (String*) __str;
     str->__length_allocated = 0;
     str->lenght = 0;
     free(string_c(str));
     __string_set_c(str, NULL);
+}
+
+/**
+ * Apaga da memória os caracteres da String dinâmica.
+ * Apaga String dinâmica da memória
+ *
+ * @param __str instância da String dinâmica a ser removida
+ */
+void string_free(void* __str) {
+    string_clear(__str);
+    free(__str);
 }
 
 /**
