@@ -4,9 +4,9 @@
 /**
  * Implementa a função realloc usando malloc e free
  *
- * @param __ptr ponteiro a ser realocado
- * @param __new_size novo tamanho para o ponteiro
- * @param __old_size atual tamanho para o ponteiro
+ * @param _ptr ponteiro a ser realocado
+ * @param _new_size novo tamanho para o ponteiro
+ * @param _old_size atual tamanho para o ponteiro
  * @return novo ponteiro realocado
  */
 void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
@@ -307,7 +307,7 @@ void string_cat(String* str, const char* s) {
  * Apaga da memória os caracteres da String dinâmica.
  * Não apaga String dinâmica da memória
  *
- * @param __str instância da String dinâmica a ser removida
+ * @param _str instância da String dinâmica a ser removida
  */
 void string_clear(void* _str) {
     String* str = (String*) _str;
@@ -321,7 +321,7 @@ void string_clear(void* _str) {
  * Apaga da memória os caracteres da String dinâmica.
  * Apaga String dinâmica da memória
  *
- * @param __str instância da String dinâmica a ser removida
+ * @param _str instância da String dinâmica a ser removida
  */
 void string_free(void* _str) {
     string_clear(_str);

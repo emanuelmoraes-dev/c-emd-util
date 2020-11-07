@@ -181,9 +181,9 @@ int array_list_get_length_allocated(ArrayList* array_list) {
 /**
  * Implementa a função realloc usando malloc e free
  *
- * @param __ptr ponteiro a ser realocado
- * @param __new_size novo tamanho para o ponteiro
- * @param __old_size atual tamanho para o ponteiro
+ * @param _ptr ponteiro a ser realocado
+ * @param _new_size novo tamanho para o ponteiro
+ * @param _old_size atual tamanho para o ponteiro
  * @return novo ponteiro realocado
  */
 void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
@@ -433,7 +433,7 @@ void* array_list_remove_at(ArrayList* array_list, int index) {
  * Remove os elementos do ArrayList sem apagar os elementos da memoria.
  * Não apaga ArrayList da memória
  *
- * @param __array_list instância do ArrayList
+ * @param _array_list instância do ArrayList
  */
 void array_list_clear(void* _array_list) {
     ArrayList* array_list = (ArrayList*)_array_list;
@@ -446,7 +446,7 @@ void array_list_clear(void* _array_list) {
  * Remove os elementos do ArrayList e apaga os elementos da memoria.
  * Não apaga ArrayList da memória
  *
- * @param __array_list instância do ArrayList
+ * @param _array_list instância do ArrayList
  */
 void array_list_clear_eraser(void* _array_list) {
     ArrayList* array_list = (ArrayList*)_array_list;
@@ -473,7 +473,7 @@ void array_list_clear_eraser_destructor(ArrayList* array_list, void (*destructor
  * Remove os elementos do ArrayList sem apagar os elementos da memoria.
  * Apaga ArrayList da memória
  *
- * @param __array_list instância do ArrayList
+ * @param _array_list instância do ArrayList
  */
 void array_list_free(void* _array_list) {
     array_list_clear(_array_list);
@@ -484,7 +484,7 @@ void array_list_free(void* _array_list) {
  * Remove os elementos do ArrayList e apaga os elementos da memoria.
  * Apaga ArrayList da memória
  *
- * @param __array_list instância do ArrayList
+ * @param _array_list instância do ArrayList
  */
 void array_list_free_eraser(void* _array_list) {
     array_list_clear_eraser(_array_list);

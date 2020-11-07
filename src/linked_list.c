@@ -406,7 +406,7 @@ void* linked_list_remove_at(LinkedList* linked_list, int index) {
  * Remove os elementos do LinkedList sem apagar os elementos da memoria.
  * Não apaga LinkedList da memória
  *
- * @param __linked_list instância do LinkedList
+ * @param _linked_list instância do LinkedList
  */
 void linked_list_clear(void* _linked_list) {
     LinkedList* linked_list = (LinkedList*) _linked_list;
@@ -417,7 +417,7 @@ void linked_list_clear(void* _linked_list) {
  * Remove os elementos do LinkedList e apaga os elementos da memoria.
  * Não apaga LinkedList da memória
  *
- * @param __linked_list instância do LinkedList
+ * @param _linked_list instância do LinkedList
  */
 void linked_list_clear_eraser(void* _linked_list) {
     LinkedList* linked_list = (LinkedList*) _linked_list;
@@ -438,7 +438,7 @@ void linked_list_clear_eraser_destructor(LinkedList* linked_list, void (*destruc
  * Remove os elementos do LinkedList sem apagar os elementos da memoria.
  * Apaga LinkedList da memória
  *
- * @param __linked_list instância do LinkedList
+ * @param _linked_list instância do LinkedList
  */
 void linked_list_free(void* _linked_list) {
     linked_list_clear(_linked_list);
@@ -449,7 +449,7 @@ void linked_list_free(void* _linked_list) {
  * Remove os elementos do LinkedList e apaga os elementos da memoria.
  * Apaga LinkedList da memória
  *
- * @param __linked_list instância do LinkedList
+ * @param _linked_list instância do LinkedList
  */
 void linked_list_free_eraser(void* _linked_list) {
     linked_list_clear_eraser(_linked_list);
