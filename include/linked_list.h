@@ -181,7 +181,7 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_find_by_index(LinkedList* array, int index);
+void* linked_list_get_by_index(LinkedList* array, int index);
 
 /**
  * Busca a posição no LinkedList da referência fornecida

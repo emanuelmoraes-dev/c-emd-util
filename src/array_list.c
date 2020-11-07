@@ -276,7 +276,7 @@ void array_list_add_all(ArrayList* array_list, void* values, int size) {
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* array_list_find_by_index(ArrayList* array_list, int index) {
+void* array_list_get_by_index(ArrayList* array_list, int index) {
     int i;
     for (i = 0; i < array_list->size; i++)
         if (i == index)
@@ -372,7 +372,7 @@ short array_list_eraser_by_reference(ArrayList* array_list, void* value) {
 void array_list_eraser_at(ArrayList* array_list, int index) {
     if (index < 0) return;
     if (index >= array_list->size) return;
-    void* value = array_list_find_by_index(array_list, index);
+    void* value = array_list_get_by_index(array_list, index);
     free(value);
 
     int i;
@@ -417,7 +417,7 @@ short array_list_remove_by_reference(ArrayList* array_list, void* value) {
 void* array_list_remove_at(ArrayList* array_list, int index) {
     if (index < 0) return NULL;
     if (index >= array_list->size) return NULL;
-    void* value = array_list_find_by_index(array_list, index);
+    void* value = array_list_get_by_index(array_list, index);
 
     int i;
     for (i = index; i < array_list->size - 1; i++) {

@@ -228,7 +228,7 @@ void array_list_add_all(ArrayList* array_list, void* values, int size);
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* array_list_find_by_index(ArrayList* array_list, int index);
+void* array_list_get_by_index(ArrayList* array_list, int index);
 
 /**
  * Busca a posição no ArrayList da referência fornecida

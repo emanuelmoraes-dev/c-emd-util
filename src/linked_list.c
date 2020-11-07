@@ -280,7 +280,7 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_find_by_index(LinkedList* linked_list, int index) {
+void* linked_list_get_by_index(LinkedList* linked_list, int index) {
     int i = 0;
     LinkedListElement* it;
     LINKED_LIST_FOR_EACH(it, linked_list)
