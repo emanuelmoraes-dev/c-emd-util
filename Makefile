@@ -15,7 +15,7 @@ LIBS  = -L $(LIB) -lm -lcemdutil
 all: dirs libcemdutil $(TESTS_FILES)
 
 libcemdutil: dirs $(LIBS_FILES)
-	ar -rcs $(LIB)/libcemdutil.a $(OBJ)/*.o
+	ar -rcs $(LIB)/libcemdutil.a $(LIBS_FILES)
 
 clean:
 	rm -rf $(BIN)
