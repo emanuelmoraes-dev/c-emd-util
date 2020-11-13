@@ -157,11 +157,16 @@ LinkedListElement* linked_list_find_previous_by_reference(LinkedList* linked_lis
 void linked_list_eraser_next(LinkedList* linked_list, LinkedListElement* element) {
     if (linked_list->size == 0)
         return;
-    LinkedListElement* alvo = element->next; // LinkedListElement que eu quero remover
-    element->next = alvo->next; // Alvo é excluido da lista
-    free(alvo->value); // Valor do alvo é excluido da memória
-    free(alvo); // Alvo é excluido da memária RAM
-    linked_list->size--;
+    LinkedListElement* const alvo = element->next; // LinkedListElement que eu quero remover
+    void* const value = alvo->value;
+    alvo->value = NULL;
+    if (alvo != NULL) {
+        element->next = alvo->next; // Alvo é excluido da lista
+        if (value != NULL)
+            free(value); // Valor do alvo é excluido da memória
+        free(alvo); // Alvo é excluido da memária RAM
+        linked_list->size--;
+    }
 }
 
 /**
@@ -175,11 +180,14 @@ void* linked_list_remove_next(LinkedList* linked_list, LinkedListElement* elemen
     if (linked_list->size == 0)
         return NULL;
     LinkedListElement* alvo = element->next; // LinkedListElement que eu quero remover
-    element->next = alvo->next; // Alvo é excluido da lista
-    void* value = alvo->value;
-    free(alvo); // Alvo é excluido da memária RAM
-    linked_list->size--;
-    return value;
+    if (alvo != NULL) {
+        element->next = alvo->next; // Alvo é excluido da lista
+        void* value = alvo->value;
+        free(alvo); // Alvo é excluido da memária RAM
+        linked_list->size--;
+        return value;
+    }
+    return NULL;
 }
 
 /**

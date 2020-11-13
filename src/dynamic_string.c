@@ -313,8 +313,11 @@ void string_clear(void* _str) {
     String* str = (String*) _str;
     str->__length_allocated = 0;
     str->lenght = 0;
-    free(string_c(str));
+
+    char* c_str = string_c(str);
     __string_set_c(str, NULL);
+    if (c_str != NULL)
+        free(c_str);
 }
 
 /**

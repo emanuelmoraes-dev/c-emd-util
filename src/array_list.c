@@ -360,7 +360,7 @@ void array_list_add_at(ArrayList* array_list, void* value, int index) {
 short array_list_eraser_by_reference(ArrayList* array_list, void* value) {
     int index = array_list_find_index_by_reference(array_list, value);
     if (index < 0) return 1;
-    free(value);
+    if (value != NULL) free(value);
 
     int i;
     for (i = index; i < array_list->size - 1; i++) {
@@ -384,7 +384,7 @@ void array_list_eraser_at(ArrayList* array_list, int index) {
     if (index < 0) return;
     if (index >= array_list->size) return;
     void* value = array_list_get_by_index(array_list, index);
-    free(value);
+    if (value != NULL) free(value);
 
     int i;
     for (i = index; i < array_list->size - 1; i++) {
@@ -464,6 +464,7 @@ void array_list_clear_eraser(void* _array_list) {
     int i;
     for (i = array_list->size - 1; i >= 0; i--)
         array_list_eraser_at(array_list, i);
+    array_list_clear(_array_list);
 }
 
 /**
@@ -478,6 +479,7 @@ void array_list_clear_eraser_destructor(ArrayList* array_list, void (*destructor
         void* value = array_list_remove_at(array_list, i);
         destructor(value);
     }
+    array_list_clear(array_list);
 }
 
 /**
