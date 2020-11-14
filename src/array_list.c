@@ -262,9 +262,25 @@ short array_list_set_length_allocated(ArrayList* array_list, int length_allocate
  * @param size quantidade de valores a serem adicionados
  */
 void array_list_add_all(ArrayList* array_list, void* values, int size) {
+    array_list_set_min_length_allocated(array_list, array_list->size + size);
     int i;
     for (i = 0; i < size; i++)
         array_list_add(array_list, array_list->type.get(values, i));
+}
+
+/**
+ * Adiciona em uma posição específica do ArrayList os valores presentes em "values"
+ *
+ * @param array_list instância do ArrayList que receberá os valores
+ * @param values array contendo os valores a serem atribuídos
+ * @param size quantidade de valores a serem adicionados
+ * @param index posição a ser adicionado os valores
+ */
+void array_list_add_all_at(ArrayList* array_list, void* values, int size, int index) {
+    array_list_set_min_length_allocated(array_list, array_list->size + size);
+    int i;
+    for (i = size - 1; i >= 0; i--)
+        array_list_add_at(array_list, array_list->type.get(values, i), index);
 }
 
 // ### implements interface_list.h ###

@@ -219,6 +219,16 @@ short array_list_set_length_allocated(ArrayList* array_list, int length_allocate
  */
 void array_list_add_all(ArrayList* array_list, void* values, int size);
 
+/**
+ * Adiciona em uma posição específica do ArrayList os valores presentes em "values"
+ *
+ * @param array_list instância do ArrayList que receberá os valores
+ * @param values array contendo os valores a serem atribuídos
+ * @param size quantidade de valores a serem adicionados
+ * @param index posição a ser adicionado os valores
+ */
+void array_list_add_all_at(ArrayList* array_list, void* values, int size, int index);
+
 // ### implements interface_list.h ###
 
 /**
