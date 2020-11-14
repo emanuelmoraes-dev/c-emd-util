@@ -317,7 +317,7 @@ int array_list_find_index_by_reference(ArrayList* array_list, void* value) {
  * @param value valor a ser adicionado no final do ArrayList
  */
 void array_list_add(ArrayList* array_list, void* value) {
-    array_list->size++;
+    int size = array_list->size++;
 
     if (array_list->__length_allocated <= array_list->size) {
         int length_allocated = array_list->reallocate_strategy(array_list->__length_allocated, array_list->size);
@@ -328,7 +328,7 @@ void array_list_add(ArrayList* array_list, void* value) {
         __array_list_set_pointer(array_list, __mfrealloc(array_list_pointer(array_list), new_length, old_length));
     }
 
-    array_list->type.set(array_list_pointer(array_list), array_list->size - 1, value);
+    array_list->type.set(array_list_pointer(array_list), size, value);
 }
 
 /**
