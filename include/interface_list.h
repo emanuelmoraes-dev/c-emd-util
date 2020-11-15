@@ -1,5 +1,5 @@
-#ifndef INTERFACE_LIST_H_INCLUDED
-#define INTERFACE_LIST_H_INCLUDED
+#ifndef C_EMD_UTIL_INTERFACE_LIST_H_INCLUDED
+#define C_EMD_UTIL_INTERFACE_LIST_H_INCLUDED
 
 // ### CRIAÇÃO DE DESTRUTORES ###
 
@@ -454,4 +454,4 @@
 #define LIST_REF_FOR_EACH \
     varname##_linked_list__ != NULL ? linked_list_for_each : array_list_for_each
 
-#endif // INTERFACE_LIST_H_INCLUDED
+#endif // C_EMD_UTIL_INTERFACE_LIST_H_INCLUDED

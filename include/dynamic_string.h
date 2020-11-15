@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_STRING_H_INCLUDED
-#define DYNAMIC_STRING_H_INCLUDED
+#ifndef C_EMD_UTIL_DYNAMIC_STRING_H_INCLUDED
+#define C_EMD_UTIL_DYNAMIC_STRING_H_INCLUDED
 
 #include <stdio.h>
 #include <string.h>
@@ -307,4 +307,4 @@ void string_replace_all(String* src, String* target, String* replace, String* va
  */
 short string_read_full_line(FILE* file, String* target, short ignore_endl);
 
-#endif // DYNAMIC_STRING_H_INCLUDED
+#endif // C_EMD_UTIL_DYNAMIC_STRING_H_INCLUDED

@@ -1,5 +1,5 @@
-#ifndef ARRAY_LIST_H_INCLUDED
-#define ARRAY_LIST_H_INCLUDED
+#ifndef C_EMD_UTIL_ARRAY_LIST_H_INCLUDED
+#define C_EMD_UTIL_ARRAY_LIST_H_INCLUDED
 
 #include <stdlib.h>
 
@@ -384,4 +384,4 @@ void array_list_free_eraser_destructor(ArrayList* array_list, void (*destructor)
  */
 void array_list_for_each(ArrayList* array_list, short (*callback)(void*, int));
 
-#endif // ARRAY_LIST_H_INCLUDED
+#endif // C_EMD_UTIL_ARRAY_LIST_H_INCLUDED

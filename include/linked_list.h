@@ -1,5 +1,5 @@
-#ifndef LINKED_LIST_H_INCLUDED
-#define LINKED_LIST_H_INCLUDED
+#ifndef C_EMD_UTIL_LINKED_LIST_H_INCLUDED
+#define C_EMD_UTIL_LINKED_LIST_H_INCLUDED
 
 #include <stdlib.h>
 
@@ -318,4 +318,4 @@ void linked_list_free_eraser_destructor(LinkedList* linked_list, void (*destruct
  */
 void linked_list_for_each(LinkedList* linked_list, short (*callback)(void*, int));
 
-#endif // LINKED_LIST_H_INCLUDED
+#endif // C_EMD_UTIL_LINKED_LIST_H_INCLUDED
