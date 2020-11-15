@@ -1,5 +1,5 @@
 #include <math.h>
-#include "dynamic_string.h"
+#include "cemdutil/dynamic_string.h"
 
 /**
  * Implementa a função realloc usando malloc e free

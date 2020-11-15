@@ -1,6 +1,6 @@
 #include <math.h>
 #include <string.h>
-#include "array_list.h"
+#include "cemdutil/array_list.h"
 
 /**
  * Cria uma estratégia de realocar apenas o espaço necessário pelo

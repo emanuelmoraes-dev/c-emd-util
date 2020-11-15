@@ -1,32 +1,39 @@
 BIN     = ./bin
-INCLUDE = ./include
 LIB     = ./lib
 OBJ     = ./obj
 SRC     = ./src
-TESTS   = ./src/tests
+TEST    = ./src/tests
+INCLUDE = ./include
 
-LIBS_FILES  = $(OBJ)/dynamic_string.o $(OBJ)/linked_list.o $(OBJ)/array_list.o
-TESTS_FILES = $(BIN)/test1
-
+EXS   = c
 CC    = gcc
 FLAGS = -O3 -Wall -std=c99
 LIBS  = -L $(LIB) -lm -lcemdutil
 
-all: dirs libcemdutil $(TESTS_FILES)
+ARRAY_LIST     = $(OBJ)/cemdutil/array_list.o
+DYNAMIC_STRING = $(OBJ)/cemdutil/dynamic_string.o
+LINKED_LIST    = $(OBJ)/cemdutil/linked_list.o
 
-libcemdutil: dirs $(LIBS_FILES)
-	ar -rcs $(LIB)/libcemdutil.a $(LIBS_FILES)
+SUB_DIRS   = $(OBJ)/cemdutil
+LIB_FILES  = $(ARRAY_LIST) $(DYNAMIC_STRING) $(LINKED_LIST)
+TEST_FILES = $(BIN)/test1
+
+all: dirs libcemdutil $(TEST_FILES)
+
+libcemdutil: dirs $(LIB_FILES)
+	ar -rcs $(LIB)/libcemdutil.a $(LIB_FILES)
+
+dirs:
+	mkdir -p $(BIN) $(LIB) $(OBJ)
+	mkdir -p $(SUB_DIRS)
 
 clean:
 	rm -rf $(BIN)
 	rm -rf $(LIB)
 	rm -rf $(OBJ)
 
-dirs:
-	mkdir -p $(BIN) $(LIB) $(OBJ)
-
-$(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
+$(OBJ)/%.o: $(SRC)/%.$(EXS)
 	$(CC) $(FLAGS) -c $< -I $(INCLUDE) -o $@
 
-$(BIN)/%: $(TESTS)/%.c
+$(BIN)/%: $(TEST)/%.$(EXS)
 	$(CC) $(FLAGS) $< -I $(INCLUDE) $(LIBS) -o $@
