@@ -9,11 +9,17 @@
 #define LINKED_LIST_FOR_EACH_PREVIOUS(it, linked_list) \
     for (it = linked_list != NULL ? linked_list_head(linked_list) : NULL; it != NULL; it = it->next)
 
+/**
+ * Struct que representa uma instância de cada elemento do LinkedList
+ */
 typedef struct __st_linked_list_element {
     void* value;
     struct __st_linked_list_element* next;
 } LinkedListElement;
 
+/**
+ * Struct que representa uma instância do LinkedList
+ */
 typedef struct __st_linked_list {
     // public
     int size;
