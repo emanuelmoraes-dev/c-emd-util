@@ -283,6 +283,52 @@ void array_list_add_all_at(ArrayList* array_list, void* values, int size, int in
         array_list_add_at(array_list, array_list->type.get(values, i), index);
 }
 
+/**
+ * Ordena o ArrayList
+ *
+ * @param array_list instância do ArrayList
+ * @param cmp função comparadora
+ * @param begin primeira posição a ser ordenada (inclusive)
+ * @param end última posição a ser ordenada (exclusive)
+ */
+void array_list_sort(ArrayList* array_list, int (*cmp)(void*, void*), int begin, int end) {
+    end--;
+
+    if (begin > end)
+        return;
+
+    int n = end - begin + 1;
+    int pv = rand() % n + begin;
+
+    void* to_end = array_list->type.get(array_list_pointer(array_list), pv);
+    void* to_pv = array_list->type.get(array_list_pointer(array_list), end);
+    array_list->type.set(array_list_pointer(array_list), end, to_end);
+    array_list->type.set(array_list_pointer(array_list), pv, to_pv);
+
+    int i, j;
+    for (i = begin, j = begin; i < end; i++) {
+        void* a = array_list->type.get(array_list_pointer(array_list), i);
+        void* b = array_list->type.get(array_list_pointer(array_list), end);
+
+        if (cmp(a, b) > 0)
+            continue;
+
+        void* to_j = a;
+        void* to_i = array_list->type.get(array_list_pointer(array_list), j);
+        array_list->type.set(array_list_pointer(array_list), j, to_j);
+        array_list->type.set(array_list_pointer(array_list), i, to_i);
+        j++;
+    }
+
+    to_end = array_list->type.get(array_list_pointer(array_list), j);
+    void* to_j = array_list->type.get(array_list_pointer(array_list), end);
+    array_list->type.set(array_list_pointer(array_list), end, to_end);
+    array_list->type.set(array_list_pointer(array_list), j, to_j);
+
+    array_list_sort(array_list, cmp, begin, j);
+    array_list_sort(array_list, cmp, j + 1, end + 1);
+}
+
 // ### implements interface_list.h ###
 
 /**

@@ -229,6 +229,16 @@ void array_list_add_all(ArrayList* array_list, void* values, int size);
  */
 void array_list_add_all_at(ArrayList* array_list, void* values, int size, int index);
 
+/**
+ * Ordena o ArrayList
+ *
+ * @param array_list instância do ArrayList
+ * @param cmp função comparadora
+ * @param begin primeira posição a ser ordenada (inclusive)
+ * @param end última posição a ser ordenada (exclusive)
+ */
+void array_list_sort(ArrayList* array_list, int (*cmp)(void*, void*), int begin, int end);
+
 // ### implements interface_list.h ###
 
 /**
