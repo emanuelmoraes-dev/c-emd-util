@@ -424,8 +424,8 @@ short array_list_remove_by_reference(ArrayList* array_list, void* value) {
 
     int i;
     for (i = index; i < array_list->size - 1; i++) {
-        void* to_front = array_list->type.get(array_list_pointer(array_list), i + 1);
-        array_list->type.set(array_list_pointer(array_list), i, to_front);
+        void* to_back = array_list->type.get(array_list_pointer(array_list), i + 1);
+        array_list->type.set(array_list_pointer(array_list), i, to_back);
     }
 
     array_list->size--;
