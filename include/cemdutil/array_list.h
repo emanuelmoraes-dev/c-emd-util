@@ -79,8 +79,8 @@ int ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(int length_allocated, int size);
 typedef struct __st_array_list {
     // public
     ArrayListType type; // Tipo de dados armazenado pelo array
-    size_t size; // tamanho so array
-    size_t min_extra; // Quantidade mínima de espaço extra na realocação do Array
+    int size; // tamanho so array
+    int min_extra; // Quantidade mínima de espaço extra na realocação do Array
     ArrayListReallocateStrategy* reallocate_strategy; // Estratégia de realocação de espaço
 
     // private
