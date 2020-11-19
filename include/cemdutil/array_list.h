@@ -18,11 +18,11 @@
         type##* v = (type*) value;\
         p[index] = *v;\
     }\
-    ArrayListType* varname() {\
-        ArrayListType* t = (ArrayListType*) malloc(sizeof(ArrayListType));\
-        t->sizeof_unit = sizeof(type);\
-        t->get = __##varname##_array_list_pointer_get;\
-        t->set = __##varname##_array_list_pointer_set;\
+    ArrayListType varname() {\
+        ArrayListType t;\
+        t.sizeof_unit = sizeof(type);\
+        t.get = __##varname##_array_list_pointer_get;\
+        t.set = __##varname##_array_list_pointer_set;\
         return t;\
     }
 
@@ -108,7 +108,7 @@ void* array_list_pointer(ArrayList* array_list);
  * @param min_extra valor extra mínimo na realocação do ArrayList
  * @param reallocate_strategy estratégia para realocação
  */
-void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType* type, int min_length_allocated, int min_extra, ArrayListReallocateStrategy* reallocate_strategy);
+void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType type, int min_length_allocated, int min_extra, ArrayListReallocateStrategy* reallocate_strategy);
 
 /**
  * Inicializa um ArrayList vazio
@@ -120,7 +120,7 @@ void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType* t
  * @param type tipo de dados armazenado pelo ArrayList
  * @param min_length_allocated quantidade mínima que deve estar alocado
  */
-void array_list_init_allocated(ArrayList* array_list, ArrayListType* type, int min_length_allocated);
+void array_list_init_allocated(ArrayList* array_list, ArrayListType type, int min_length_allocated);
 
 /**
  * Inicializa um ArrayList vazio
@@ -131,7 +131,7 @@ void array_list_init_allocated(ArrayList* array_list, ArrayListType* type, int m
  * @param array_list instância do ArrayList a ser inicializado
  * @param type tipo de dados armazenado pelo ArrayList
  */
-void array_list_init(ArrayList* array_list, ArrayListType* type);
+void array_list_init(ArrayList* array_list, ArrayListType type);
 
 /**
  * Cria um novo ArrayList vazio
@@ -145,7 +145,7 @@ void array_list_init(ArrayList* array_list, ArrayListType* type);
  * @param reallocate_strategy estratégia para realocação
  * @return nova instância de ArrayList
  */
-ArrayList* new_array_list_reallocate_strategy(ArrayListType* type, int min_length_allocated, int min_extra, ArrayListReallocateStrategy* reallocate_strategy);
+ArrayList* new_array_list_reallocate_strategy(ArrayListType type, int min_length_allocated, int min_extra, ArrayListReallocateStrategy* reallocate_strategy);
 
 /**
  * Cria um novo ArrayList vazio
@@ -157,7 +157,7 @@ ArrayList* new_array_list_reallocate_strategy(ArrayListType* type, int min_lengt
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @return nova instância de ArrayList
  */
-ArrayList* new_array_list_allocated(ArrayListType* type, int min_length_allocated);
+ArrayList* new_array_list_allocated(ArrayListType type, int min_length_allocated);
 
 /**
  * Cria um novo ArrayList vazio
@@ -168,7 +168,7 @@ ArrayList* new_array_list_allocated(ArrayListType* type, int min_length_allocate
  * @param type tipo de dados armazenado pelo array
  * @return nova instância do ArrayList
  */
-ArrayList* new_array_list(ArrayListType* type);
+ArrayList* new_array_list(ArrayListType type);
 
 /**
  * @param array_list instância do ArrayList
