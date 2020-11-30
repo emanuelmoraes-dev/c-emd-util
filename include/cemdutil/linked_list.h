@@ -22,7 +22,7 @@ typedef struct __st_linked_list_element {
  */
 typedef struct __st_linked_list {
     // public
-    int size;
+    size_t size;
 
     // private
     LinkedListElement* __head;
@@ -168,7 +168,7 @@ void linked_list_clear_eraser_destructor_by_head(LinkedList* linked_list, Linked
  * @param index posição do elemento a ser buscado
  * @return LinkedListElement* que possui a posição fornecida
  */
-LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, int index);
+LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, size_t index);
 
 /**
  * Busca um LinkedListElement* da lista que possui um valor com a mesma referencia fornecida
@@ -187,7 +187,7 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_get_at(LinkedList* linked_list, int index);
+void* linked_list_get_at(LinkedList* linked_list, size_t index);
 
 /**
  * Atualiza o valor do elemento do LinkedList que possui a posição fornecida
@@ -196,7 +196,7 @@ void* linked_list_get_at(LinkedList* linked_list, int index);
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
  */
-void linked_list_set_at(LinkedList* linked_list, int index, void* value);
+void linked_list_set_at(LinkedList* linked_list, size_t index, void* value);
 
 /**
  * Busca a posição no LinkedList da referência fornecida
@@ -205,7 +205,7 @@ void linked_list_set_at(LinkedList* linked_list, int index, void* value);
  * @param value referência a ser buscada
  * @return posição na lista da referência. -1 se não for encontrada
  */
-int linked_list_find_index_by_reference(LinkedList* linked_list, void* value);
+size_t linked_list_find_index_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Adiciona no final do LinkedList um valor
@@ -222,7 +222,7 @@ void linked_list_add(LinkedList* linked_list, void* value);
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
  */
-void linked_list_add_at(LinkedList* linked_list, void* value, int index);
+void linked_list_add_at(LinkedList* linked_list, void* value, size_t index);
 
 /**
  * Remove do LinkedList e apaga da memoria a refêrencia fornecida
@@ -241,7 +241,7 @@ short linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
  * @param index posição a ter o elemento removido do LinkedList e apagado
  *        da memória
  */
-void linked_list_eraser_at(LinkedList* linked_list, int index);
+void linked_list_eraser_at(LinkedList* linked_list, size_t index);
 
 /**
  * Remove do LinkedList sem apagar da memoria a refêrencia fornecida
@@ -262,7 +262,7 @@ short linked_list_remove_by_reference(LinkedList* linked_list, void* value);
  *        apagado da memória
  * @return referência removida do LinkedList
  */
-void* linked_list_remove_at(LinkedList* linked_list, int index);
+void* linked_list_remove_at(LinkedList* linked_list, size_t index);
 
 /**
  * Remove os elementos do LinkedList sem apagar os elementos da memoria.
@@ -322,6 +322,6 @@ void linked_list_free_eraser_destructor(LinkedList* linked_list, void (*destruct
  *        1 para continuar a iteração. 0 para que o comando
  *        break seja executado
  */
-void linked_list_for_each(LinkedList* linked_list, short (*callback)(void*, int));
+void linked_list_for_each(LinkedList* linked_list, short (*callback)(void*, size_t));
 
 #endif // C_EMD_UTIL_LINKED_LIST_H_INCLUDED
