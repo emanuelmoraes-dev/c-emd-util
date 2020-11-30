@@ -168,7 +168,7 @@ void linked_list_clear_eraser_destructor_by_head(LinkedList* linked_list, Linked
  * @param index posição do elemento a ser buscado
  * @return LinkedListElement* que possui a posição fornecida
  */
-LinkedListElement* linked_list_find_element_by_index(LinkedList* linked_list, int index);
+LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, int index);
 
 /**
  * Busca um LinkedListElement* da lista que possui um valor com a mesma referencia fornecida
@@ -187,7 +187,7 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_get_by_index(LinkedList* linked_list, int index);
+void* linked_list_get_at(LinkedList* linked_list, int index);
 
 /**
  * Atualiza o valor do elemento do LinkedList que possui a posição fornecida
@@ -196,7 +196,7 @@ void* linked_list_get_by_index(LinkedList* linked_list, int index);
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
  */
-void linked_list_set_by_index(LinkedList* linked_list, int index, void* value);
+void linked_list_set_at(LinkedList* linked_list, int index, void* value);
 
 /**
  * Busca a posição no LinkedList da referência fornecida

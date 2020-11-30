@@ -248,7 +248,7 @@ void array_list_sort(ArrayList* array_list, int (*cmp)(void*, void*), int begin,
  * @param index posição do alemento
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* array_list_get_by_index(ArrayList* array_list, int index);
+void* array_list_get_at(ArrayList* array_list, int index);
 
 /**
  * Atualiza o valor do elemento do ArrayList que possui a posição fornecida
@@ -257,7 +257,7 @@ void* array_list_get_by_index(ArrayList* array_list, int index);
  * @param index posição do elemento a ser atualizado
  * @param value valor a ser atribuído
  */
-void array_list_set_by_index(ArrayList* array_list, int index, void* value);
+void array_list_set_at(ArrayList* array_list, int index, void* value);
 
 /**
  * Busca a posição no ArrayList da referência fornecida

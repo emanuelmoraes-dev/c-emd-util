@@ -256,7 +256,7 @@ void linked_list_clear_eraser_destructor_by_head(LinkedList* linked_list, Linked
  * @param index posição do elemento a ser buscado
  * @return LinkedListElement* que possui a posição fornecida
  */
-LinkedListElement* linked_list_find_element_by_index(LinkedList* linked_list, int index) {
+LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, int index) {
     int i = 0;
     LinkedListElement* it;
     LINKED_LIST_FOR_EACH(it, linked_list)
@@ -288,7 +288,7 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  * @param index posição do alemento a ser buscado
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_get_by_index(LinkedList* linked_list, int index) {
+void* linked_list_get_at(LinkedList* linked_list, int index) {
     int i = 0;
     LinkedListElement* it;
     LINKED_LIST_FOR_EACH(it, linked_list)
@@ -304,8 +304,8 @@ void* linked_list_get_by_index(LinkedList* linked_list, int index) {
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
  */
-void linked_list_set_by_index(LinkedList* linked_list, int index, void* value) {
-    LinkedListElement* element = linked_list_find_element_by_index(linked_list, index);
+void linked_list_set_at(LinkedList* linked_list, int index, void* value) {
+    LinkedListElement* element = linked_list_find_element_at(linked_list, index);
     element->value = value;
 }
 
@@ -348,7 +348,7 @@ void linked_list_add(LinkedList* linked_list, void* value) {
  * @param index posição a ser adicionada o valor
  */
 void linked_list_add_at(LinkedList* linked_list, void* value, int index) {
-    LinkedListElement* const ant = linked_list_find_element_by_index(linked_list, index-1);
+    LinkedListElement* const ant = linked_list_find_element_at(linked_list, index-1);
     LinkedListElement* const prx = ant->next;
     ant->next = new_element();
     ant->next->value = value;
@@ -385,7 +385,7 @@ short linked_list_eraser_by_reference(LinkedList* linked_list, void* value) {
  *        da memória
  */
 void linked_list_eraser_at(LinkedList* linked_list, int index) {
-    LinkedListElement* c = linked_list_find_element_by_index(linked_list, index-1);
+    LinkedListElement* c = linked_list_find_element_at(linked_list, index-1);
     linked_list_eraser_next(linked_list, c);
 }
 
@@ -418,7 +418,7 @@ short linked_list_remove_by_reference(LinkedList* linked_list, void* value) {
  * @return referência removida do LinkedList
  */
 void* linked_list_remove_at(LinkedList* linked_list, int index) {
-    LinkedListElement* c = linked_list_find_element_by_index(linked_list, index-1);
+    LinkedListElement* c = linked_list_find_element_at(linked_list, index-1);
     return linked_list_remove_next(linked_list, c);
 }
 
