@@ -1,0 +1,10 @@
+#ifndef C_EMD_UTIL_ERRORS_H_INCLUDED
+#define C_EMD_UTIL_ERRORS_H_INCLUDED
+
+#define EMD_OK 0
+#define EMD_ERRNO 1000
+#define EMD_OVERFLOW 1001
+
+typedef int EMD_ERR;
+
+#endif // C_EMD_UTIL_ERRORS_H_INCLUDED
