@@ -10,19 +10,27 @@
 
 #define ARRAY_LIST_TYPEDEF(varname, type) \
     void* __##varname##_array_list_pointer_get(void* pointer, size_t index) {\
-        type##* p = (type*) pointer;\
+        type* p = (type*) pointer;\
         return &p[index];\
     }\
     void __##varname##_array_list_pointer_set(void* pointer, size_t index, void* value) {\
-        type##* p = (type*) pointer;\
-        type##* v = (type*) value;\
+        type* p = (type*) pointer;\
+        type* v = (type*) value;\
         p[index] = *v;\
+    }\
+    void __##varname##_array_list_pointer_swap(void* pointer, size_t i, size_t j) {\
+        type* p = (type*) pointer;\
+        type to_j = p[i];\
+        type to_i = p[j];\
+        p[j] = to_j;\
+        p[i] = to_i;\
     }\
     ArrayListType varname() {\
         ArrayListType t;\
         t.sizeof_unit = sizeof(type);\
         t.get = __##varname##_array_list_pointer_get;\
         t.set = __##varname##_array_list_pointer_set;\
+        t.swap = __##varname##_array_list_pointer_swap;\
         return t;\
     }
 
@@ -30,6 +38,7 @@ typedef struct __st_array_list_type {
     size_t sizeof_unit;
     void* (*get)(void* pointer, size_t index);
     void (*set)(void* pointer, size_t index, void* value);
+    void (*swap)(void* pointer, size_t i, size_t j);
 } ArrayListType;
 
 /**

@@ -299,11 +299,7 @@ void array_list_sort(ArrayList* array_list, size_t (*cmp)(void*, void*), size_t 
 
     size_t n = end - begin + 1;
     size_t pv = rand() % n + begin;
-
-    void* to_end = array_list->type.get(array_list_pointer(array_list), pv);
-    void* to_pv = array_list->type.get(array_list_pointer(array_list), end);
-    array_list->type.set(array_list_pointer(array_list), end, to_end);
-    array_list->type.set(array_list_pointer(array_list), pv, to_pv);
+    array_list->type.swap(array_list_pointer(array_list), pv, end);
 
     size_t i, j;
     for (i = begin, j = begin; i < end; i++) {
@@ -313,20 +309,16 @@ void array_list_sort(ArrayList* array_list, size_t (*cmp)(void*, void*), size_t 
         if (cmp(a, b) > 0)
             continue;
 
-        void* to_j = a;
-        void* to_i = array_list->type.get(array_list_pointer(array_list), j);
-        array_list->type.set(array_list_pointer(array_list), j, to_j);
-        array_list->type.set(array_list_pointer(array_list), i, to_i);
+        array_list->type.swap(array_list_pointer(array_list), i, j);
         j++;
     }
 
-    to_end = array_list->type.get(array_list_pointer(array_list), j);
-    void* to_j = array_list->type.get(array_list_pointer(array_list), end);
-    array_list->type.set(array_list_pointer(array_list), end, to_end);
-    array_list->type.set(array_list_pointer(array_list), j, to_j);
+    array_list->type.swap(array_list_pointer(array_list), j, end);
 
     array_list_sort(array_list, cmp, begin, j);
     array_list_sort(array_list, cmp, j + 1, end + 1);
+
+    return;
 }
 
 // ### implements interface_list.h ###
