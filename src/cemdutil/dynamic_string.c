@@ -1,6 +1,9 @@
 #include <math.h>
 #include "cemdutil/dynamic_string.h"
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 /**
  * Implementa a função realloc usando malloc e free
  *

@@ -2,6 +2,7 @@
 #define C_EMD_UTIL_LINKED_LIST_H_INCLUDED
 
 #include <stdlib.h>
+#include "cemdutil/types.h"
 
 #define LINKED_LIST_FOR_EACH(it, linked_list) \
     for (it = linked_list != NULL && linked_list_head(linked_list) != NULL ? linked_list_head(linked_list)->next : NULL; it != NULL; it = it->next)
@@ -73,8 +74,9 @@ LinkedList* new_linked_list();
  *
  * @param linked_list instância do LinkedList
  * @param value valor a ser adicionado no início do LinkedList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_add_top(LinkedList* linked_list, void* value);
+void linked_list_add_top(LinkedList* linked_list, void* value, EMD_ERR* err);
 
 /**
  * Retorna o valor do início do LinkedList
@@ -87,7 +89,7 @@ void* linked_list_top(LinkedList* linked_list);
  * Remove o elemento do início do LinkedList
  *
  * @param linked_list instância do LinkedList
- * @return valor removido do início do LinkedList
+ * @return valor removido do início do LinkedList. NULL se a LinkedList estiver vazia
  */
 void* linked_list_remove_top(LinkedList* linked_list);
 
@@ -95,8 +97,9 @@ void* linked_list_remove_top(LinkedList* linked_list);
  * Remove da lista e apaga da memória o elemento do início do LinkedList
  *
  * @param linked_list instância do LinkedList
+ * @return 1 se houve um elemento do início do LinkedList que foi removido da LinkedList e apagado da memória. 0 caso contrário
  */
-void linked_list_eraser_top(LinkedList* linked_list);
+EMD_BIT linked_list_eraser_top(LinkedList* linked_list);
 
 /**
  * Adiciona um valor no LinkedList após o elemento informado
@@ -104,15 +107,16 @@ void linked_list_eraser_top(LinkedList* linked_list);
  * @param linked_list instância do LinkedList
  * @param before elemento anterior ao elemento a ser adicionado
  * @param value valor a ser adicionado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_add_next(LinkedList* linked_list, LinkedListElement* before, void* value);
+void linked_list_add_next(LinkedList* linked_list, LinkedListElement* before, void* value, EMD_ERR* err);
 
 /**
  * Busca e retorna o elemento anterior ao elemento da lista que possui a mesma referência de "value"
  *
  * @param linked_list instância do LinkedList
  * @param value referência do valor posterior ao valor que será retornado
- * @return elemento anterior ao elemento que possui a referência recebida
+ * @return elemento anterior ao elemento que possui a referência recebida. NULL caso o elemento não seja encontrado
  */
 LinkedListElement* linked_list_find_previous_by_reference(LinkedList* linked_list, void* value);
 
@@ -121,15 +125,16 @@ LinkedListElement* linked_list_find_previous_by_reference(LinkedList* linked_lis
  *
  * @param linked_list instância do LinkedList
  * @param element elemento anterior ao elemento que será apagado
+ * @return 1 se o elemento foi localizado, removido da LinkedList e apagado da memória. 0 caso contrário
  */
-void linked_list_eraser_next(LinkedList* linked_list, LinkedListElement* element);
+EMD_BIT linked_list_eraser_next(LinkedList* linked_list, LinkedListElement* element);
 
 /**
  * Remove do LinkedList sem apagar da memória o elemento posterior ao elemento recebido
  *
  * @param linked_list instância do LinkedList
  * @param element elemento anterior ao elemento que será removido
- * @return valor removido do LinkedList
+ * @return valor removido do LinkedList. NULL caso o valor não tenha sido encontrado
  */
 void* linked_list_remove_next(LinkedList* linked_list, LinkedListElement* element);
 
@@ -166,15 +171,16 @@ void linked_list_clear_eraser_destructor_by_head(LinkedList* linked_list, Linked
  *
  * @param linked_list instância do LinkedList
  * @param index posição do elemento a ser buscado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return LinkedListElement* que possui a posição fornecida
  */
-LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, size_t index);
+LinkedListElement* linked_list_find_element_at(LinkedList* linked_list, size_t index, EMD_ERR* err);
 
 /**
  * Busca um LinkedListElement* da lista que possui um valor com a mesma referencia fornecida
  *
  * @param linked_list instância do LinkedList
- * @param value referência que aponta para o valor do LinkedListElement a ser buscado
+ * @param value referência que aponta para o valor do LinkedListElement a ser buscado. NULL se o valor não foi encontrado
  */
 LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list, void* value);
 
@@ -185,9 +191,10 @@ LinkedListElement* linked_list_find_element_by_reference(LinkedList* linked_list
  *
  * @param linked_list instância do LinkedList
  * @param index posição do alemento a ser buscado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* linked_list_get_at(LinkedList* linked_list, size_t index);
+void* linked_list_get_at(LinkedList* linked_list, size_t index, EMD_ERR* err);
 
 /**
  * Atualiza o valor do elemento do LinkedList que possui a posição fornecida
@@ -195,8 +202,9 @@ void* linked_list_get_at(LinkedList* linked_list, size_t index);
  * @param linked_list instância do LinkedList
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_set_at(LinkedList* linked_list, size_t index, void* value);
+void linked_list_set_at(LinkedList* linked_list, size_t index, void* value, EMD_ERR* err);
 
 /**
  * Busca a posição no LinkedList da referência fornecida
@@ -212,8 +220,9 @@ size_t linked_list_find_index_by_reference(LinkedList* linked_list, void* value)
  *
  * @param linked_list instância do LinkedList que receberá o valor
  * @param value valor a ser adicionado no final do LinkedList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_add(LinkedList* linked_list, void* value);
+void linked_list_add(LinkedList* linked_list, void* value, EMD_ERR* err);
 
 /**
  * Adiciona um elemento no LinkedList na posicao informada
@@ -221,17 +230,18 @@ void linked_list_add(LinkedList* linked_list, void* value);
  * @param linked_list instância do LinkedList
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_add_at(LinkedList* linked_list, void* value, size_t index);
+void linked_list_add_at(LinkedList* linked_list, void* value, size_t index, EMD_ERR* err);
 
 /**
  * Remove do LinkedList e apaga da memoria a refêrencia fornecida
  *
  * @param linked_list instância do LinkedList
  * @param value valor a ser removido do LinkedList e apagado da memória
- * @return 0 se a referência foi encontrada, removida do LinkedList e apagada da memória
+ * @return 1 se a referência foi encontrada, removida do LinkedList e apagada da memória. 0 caso contrário
  */
-short linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
+EMD_BIT linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Remove do LinkedList e apaga elemento da memoria que possui a posição
@@ -240,8 +250,9 @@ short linked_list_eraser_by_reference(LinkedList* linked_list, void* value);
  * @param linked_list instância do LinkedList
  * @param index posição a ter o elemento removido do LinkedList e apagado
  *        da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void linked_list_eraser_at(LinkedList* linked_list, size_t index);
+void linked_list_eraser_at(LinkedList* linked_list, size_t index, EMD_ERR* err);
 
 /**
  * Remove do LinkedList sem apagar da memoria a refêrencia fornecida
@@ -249,9 +260,9 @@ void linked_list_eraser_at(LinkedList* linked_list, size_t index);
  * @param linked_list instância do LinkedList
  * @param value valor a ser removido do LinkedList sem ser apagado da
  *        memória
- * @return 0 se a referência foi encontrada e removida do LinkedList
+ * @return 1 se a referência foi encontrada e removida do LinkedList. 0 caso contrário
  */
-short linked_list_remove_by_reference(LinkedList* linked_list, void* value);
+EMD_BIT linked_list_remove_by_reference(LinkedList* linked_list, void* value);
 
 /**
  * Remove do LinkedList sem apagar elemento da memoria que possui a posição
@@ -260,9 +271,10 @@ short linked_list_remove_by_reference(LinkedList* linked_list, void* value);
  * @param linked_list instância do LinkedList
  * @param index posição a ter o elemento removido do LinkedList sem ser
  *        apagado da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return referência removida do LinkedList
  */
-void* linked_list_remove_at(LinkedList* linked_list, size_t index);
+void* linked_list_remove_at(LinkedList* linked_list, size_t index, EMD_ERR* err);
 
 /**
  * Remove os elementos do LinkedList sem apagar os elementos da memoria.

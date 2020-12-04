@@ -15,7 +15,7 @@
  *
  * @param varname nome do parâmetro
  */
-#define LIST_PARAM(varname) LinkedList* varname##_linked_list__, ArrayList* varname##_array_list__
+#define LIST_PARAM(varname) List* varname##_linked_list__, ArrayList* varname##_array_list__
 
 /**
  * Passa LIST para LIST em parâmetro de função
@@ -24,9 +24,9 @@
  */
 #define LIST_ARG(valuename) valuename##_linked_list__, valuename##_array_list__
 /**
- * Passa LinkedList para LIST em parâmetro de função
+ * Passa List para LIST em parâmetro de função
  *
- * @param linked_list instância de LinkedList
+ * @param linked_list instância de List
  */
 #define LIST_ARG_LINKED_LIST(linked_list) linked_list, NULL
 /**
@@ -43,7 +43,7 @@
  * @param valuename nome da variável que será atribuída na variável criada
  */
 #define LIST_LET(varname, valuename) \
-    LinkedList* varname##_linked_list__ = valuename##_linked_list__;\
+    List* varname##_linked_list__ = valuename##_linked_list__;\
     ArrayList* varname##_array_list__ = valuename##_array_list__
 /**
  * Declara LIST
@@ -52,16 +52,16 @@
  * @param valuename nome da variável que será atribuída na variável criada
  */
 #define LIST_DECLARE(varname) \
-    LinkedList* varname##_linked_list__;\
+    List* varname##_linked_list__;\
     ArrayList* varname##_array_list__
 /**
- * Declara LIST de um LinkedList*
+ * Declara LIST de um List*
  *
  * @param varname nome da variável a ser criada
- * @param value valor do tipo LinkedList* a ser atribuído na variável a ser criada
+ * @param value valor do tipo List* a ser atribuído na variável a ser criada
  */
 #define LIST_LET_LINKED_LIST(varname, value) \
-    LinkedList* varname##_linked_list__ = value;\
+    List* varname##_linked_list__ = value;\
     ArrayList* varname##_array_list__ = NULL
 /**
  * Declara LIST de um ArrayList*
@@ -70,7 +70,7 @@
  * @param value valor do tipo ArrayList* a ser atribuído na variável a ser criada
  */
 #define LIST_LET_ARRAY_LIST(varname, value) \
-    LinkedList* varname##_linked_list__ = NULL;\
+    List* varname##_linked_list__ = NULL;\
     ArrayList* varname##_array_list__ = value
 
 /**
@@ -83,10 +83,10 @@
     varname##_linked_list__ = valuename##_linked_list__;\
     varname##_array_list__ = valuename##_array_list__
 /**
- * Atribui em LIST um LinkedList*
+ * Atribui em LIST um List*
  *
  * @param varname nome da variável que terá seu valor alterado
- * @param value valor do tipo LinkedList* a ser atribuido na variável "varname"
+ * @param value valor do tipo List* a ser atribuido na variável "varname"
  */
 #define LIST_SET_LINKED_LIST(varname, value) \
     varname##_linked_list__ = value;\
@@ -102,7 +102,7 @@
     varname##_array_list__ = value
 
 /**
- * Obtém a LIST com o tipo LinkedList*. Se o tipo for incompatível, retorna-se NULL
+ * Obtém a LIST com o tipo List*. Se o tipo for incompatível, retorna-se NULL
  *
  * @param varname instância de LIST
  */
@@ -121,11 +121,12 @@
  *
  * @param varname instância de LIST
  * @param index posição do alemento a ser buscado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-#define LIST_GET_AT(varname, index) \
-    varname##_linked_list__ != NULL ? linked_list_get_at(varname##_linked_list__, index) : \
-    array_list_get_at(varname##_array_list__, index)
+#define LIST_GET_AT(varname, index, err) \
+    varname##_linked_list__ != NULL ? linked_list_get_at(varname##_linked_list__, index, err) : \
+    array_list_get_at(varname##_array_list__, index, err)
 
 /**
  * Atualiza o valor do elemento do LIST que possui a posição fornecida
@@ -133,10 +134,11 @@
  * @param varname instância de LIST
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-#define LIST_SET_AT(varname, index, value) \
-    varname##_linked_list__ != NULL ? linked_list_set_at(varname##_linked_list__, index, value) : \
-    array_list_set_at(varname##_array_list__, index, value)
+#define LIST_SET_AT(varname, index, value, err) \
+    varname##_linked_list__ != NULL ? linked_list_set_at(varname##_linked_list__, index, value, err) : \
+    array_list_set_at(varname##_array_list__, index, value, err)
 
 /**
  * Busca a posição no LIST da referência fornecida
@@ -154,10 +156,11 @@
  *
  * @param varname instância de LIST que receberá o valor
  * @param value valor a ser adicionado no final do LIST
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-#define LIST_ADD(varname, value) \
-    varname##_linked_list__ != NULL ? linked_list_add(varname##_linked_list__, value) : \
-    array_list_add(varname##_array_list__, value)
+#define LIST_ADD(varname, valuem, err) \
+    varname##_linked_list__ != NULL ? linked_list_add(varname##_linked_list__, value, err) : \
+    array_list_add(varname##_array_list__, value, err)
 
 /**
  * Adiciona um elemento no LIST na posicao informada
@@ -165,17 +168,18 @@
  * @param varname instância de LIST
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-#define LIST_ADD_AT(varname, value, index) \
-    varname##_linked_list__ != NULL ? linked_list_add_at(varname##_linked_list__, value, index) : \
-    array_list_add_at(varname##_array_list__, value, index)
+#define LIST_ADD_AT(varname, value, index, err) \
+    varname##_linked_list__ != NULL ? linked_list_add_at(varname##_linked_list__, value, index, err) : \
+    array_list_add_at(varname##_array_list__, value, index, err)
 
 /**
  * Remove do LIST e apaga da memoria a refêrencia fornecida
  *
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST e apagado da memória
- * @return 0 se a referência foi encontrada, removida de LIST e apagada da memória
+ * @return 1 se a referência foi encontrada, removida do List e apagada da memória. 0 caso contrário
  */
 #define LIST_ERASER_BY_REFERENCE(varname, value) \
     varname##_linked_list__ != NULL ? linked_list_eraser_by_reference(varname##_linked_list__, value) : \
@@ -188,10 +192,11 @@
  * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST e apagado
  *        da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-#define LIST_ERASER_AT(varname, index) \
-    varname##_linked_list__ != NULL ? linked_list_eraser_at(varname##_linked_list__, index) : \
-    array_list_eraser_at(varname##_array_list__, index)
+#define LIST_ERASER_AT(varname, index, err) \
+    varname##_linked_list__ != NULL ? linked_list_eraser_at(varname##_linked_list__, index, err) : \
+    array_list_eraser_at(varname##_array_list__, index, err)
 
 /**
  * Remove do LIST sem apagar da memoria a refêrencia fornecida
@@ -199,7 +204,7 @@
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST sem ser apagado da
  *        memória
- * @return 0 se a referência foi encontrada e removida de LIST
+ * @return 1 se a referência foi encontrada e removida do List. 0 caso contrário
  */
 #define LIST_REMOVE_BY_REFERENCE(varname, value) \
     varname##_linked_list__ != NULL ? linked_list_remove_by_reference(varname##_linked_list__, value) : \
@@ -212,11 +217,12 @@
  * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST sem ser
  *        apagado da memória
- * @return referência removida de LIST
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ * @return referência removida do List
  */
-#define LIST_REMOVE_AT(varname, index) \
-    varname##_linked_list__ != NULL ? linked_list_remove_at(varname##_linked_list__, index) : \
-    array_list_remove_at(varname##_array_list__, index)
+#define LIST_REMOVE_AT(varname, index, err) \
+    varname##_linked_list__ != NULL ? linked_list_remove_at(varname##_linked_list__, index, err) : \
+    array_list_remove_at(varname##_array_list__, index, err)
 
 /**
  * Remove os elementos de LIST sem apagar os elementos da memoria.
@@ -284,7 +290,7 @@
 
  * @param varname instância de LIST
  * @param callback função que receberá cada valor e posição
- *        presente no LinkedList. "callback" deve retornar
+ *        presente no List. "callback" deve retornar
  *        1 para continuar a iteração. 0 para que o comando
  *        break seja executado
  */
@@ -299,6 +305,7 @@
  *
  * @param varname instância de LIST
  * @param index posição do alemento a ser buscado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
 #define LIST_REF_GET_AT \
@@ -310,6 +317,7 @@
  * @param varname instância de LIST
  * @param index posição do alemento a ser atualizado
  * @param value valor a ser atribuído
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
 #define LIST_REF_SET_AT \
     varname##_linked_list__ != NULL ? linked_list_set_at : array_list_set_at
@@ -329,6 +337,7 @@
  *
  * @param varname instância de LIST que receberá o valor
  * @param value valor a ser adicionado no final do LIST
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
 #define LIST_REF_ADD \
     varname##_linked_list__ != NULL ? linked_list_add : array_list_add
@@ -339,6 +348,7 @@
  * @param varname instância de LIST
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
 #define LIST_REF_ADD_AT \
     varname##_linked_list__ != NULL ? linked_list_add_at : array_list_add_at
@@ -348,7 +358,7 @@
  *
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST e apagado da memória
- * @return 0 se a referência foi encontrada, removida de LIST e apagada da memória
+ * @return 1 se a referência foi encontrada, removida do List e apagada da memória. 0 caso contrário
  */
 #define LIST_REF_ERASER_BY_REFERENCE \
     varname##_linked_list__ != NULL ? linked_list_eraser_by_reference : array_list_eraser_by_reference
@@ -360,6 +370,7 @@
  * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST e apagado
  *        da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
 #define LIST_REF_ERASER_AT \
     varname##_linked_list__ != NULL ? linked_list_eraser_at : array_list_eraser_at
@@ -370,7 +381,7 @@
  * @param varname instância de LIST
  * @param value valor a ser removido do LIST sem ser apagado da
  *        memória
- * @return 0 se a referência foi encontrada e removida de LIST
+ * @return 1 se a referência foi encontrada e removida do List. 0 caso contrário
  */
 #define LIST_REF_REMOVE_BY_REFERENCE \
     varname##_linked_list__ != NULL ? linked_list_remove_by_reference : array_list_remove_by_reference
@@ -382,7 +393,8 @@
  * @param varname instância de LIST
  * @param index posição a ter o elemento removido do LIST sem ser
  *        apagado da memória
- * @return referência removida de LIST
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ * @return referência removida do List
  */
 #define LIST_REF_REMOVE_AT \
     varname##_linked_list__ != NULL ? linked_list_remove_at : array_list_remove_at
@@ -447,7 +459,7 @@
 
  * @param varname instância de LIST
  * @param callback função que receberá cada valor e posição
- *        presente no LinkedList. "callback" deve retornar
+ *        presente no List. "callback" deve retornar
  *        1 para continuar a iteração. 0 para que o comando
  *        break seja executado
  */

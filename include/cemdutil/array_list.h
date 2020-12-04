@@ -2,9 +2,8 @@
 #define C_EMD_UTIL_ARRAY_LIST_H_INCLUDED
 
 #include <stdlib.h>
+#include "cemdutil/types.h"
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #define ARRAY_LIST_DEFAULT_MIN_EXTRA 20 // Quantidade mínima de espaço extra em realocações de memória
 #define ARRAY_LIST_DEFAULT_STRATEGY_REALLOCATED ARRAY_LIST_HALF_STRATEGY_REALLOCATED // Estratégia padrão de realocação de memória
 
@@ -46,10 +45,11 @@ typedef struct __st_array_list_type {
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do ArrayList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-typedef size_t ArrayListReallocateStrategy(size_t length_allocated, size_t lenght);
+typedef size_t ArrayListReallocateStrategy(size_t length_allocated, size_t lenght, EMD_ERR* err);
 
 /**
  * Cria uma estratégia de realocar apenas o espaço necessário pelo
@@ -57,30 +57,33 @@ typedef size_t ArrayListReallocateStrategy(size_t length_allocated, size_t lengh
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do ArrayList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, size_t size);
+size_t ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, size_t size, EMD_ERR* err);
 
 /**
  * É a estratégia de realocar adicionando a metade do tamanho do array
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do array
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, size_t size);
+size_t ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, size_t size, EMD_ERR* err);
 
 /**
  * É a estratégia de realocar o dobro do que foi alocado anteriormente
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do array
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, size_t size);
+size_t ARRAY_LIST_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, size_t size, EMD_ERR* err);
 
 /**
  * Struct que representa uma instância do ArrayList
@@ -116,8 +119,9 @@ void* array_list_pointer(ArrayList* array_list);
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @param min_extra valor extra mínimo na realocação do ArrayList
  * @param reallocate_strategy estratégia para realocação
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType type, size_t min_length_allocated, size_t min_extra, ArrayListReallocateStrategy* reallocate_strategy);
+void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType type, size_t min_length_allocated, size_t min_extra, ArrayListReallocateStrategy* reallocate_strategy, EMD_ERR* err);
 
 /**
  * Inicializa um ArrayList vazio
@@ -128,8 +132,9 @@ void array_list_init_reallocate_strategy(ArrayList* array_list, ArrayListType ty
  * @param array_list instância do ArrayList a ser inicializado
  * @param type tipo de dados armazenado pelo ArrayList
  * @param min_length_allocated quantidade mínima que deve estar alocado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_init_allocated(ArrayList* array_list, ArrayListType type, size_t min_length_allocated);
+void array_list_init_allocated(ArrayList* array_list, ArrayListType type, size_t min_length_allocated, EMD_ERR* err);
 
 /**
  * Inicializa um ArrayList vazio
@@ -139,8 +144,9 @@ void array_list_init_allocated(ArrayList* array_list, ArrayListType type, size_t
  *
  * @param array_list instância do ArrayList a ser inicializado
  * @param type tipo de dados armazenado pelo ArrayList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_init(ArrayList* array_list, ArrayListType type);
+void array_list_init(ArrayList* array_list, ArrayListType type, EMD_ERR* err);
 
 /**
  * Cria um novo ArrayList vazio
@@ -152,9 +158,10 @@ void array_list_init(ArrayList* array_list, ArrayListType type);
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @param min_extra valor extra mínimo na realocação do ArrayList
  * @param reallocate_strategy estratégia para realocação
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return nova instância de ArrayList
  */
-ArrayList* new_array_list_reallocate_strategy(ArrayListType type, size_t min_length_allocated, size_t min_extra, ArrayListReallocateStrategy* reallocate_strategy);
+ArrayList* new_array_list_reallocate_strategy(ArrayListType type, size_t min_length_allocated, size_t min_extra, ArrayListReallocateStrategy* reallocate_strategy, EMD_ERR* err);
 
 /**
  * Cria um novo ArrayList vazio
@@ -164,9 +171,10 @@ ArrayList* new_array_list_reallocate_strategy(ArrayListType type, size_t min_len
  *
  * @param type tipo de dados armazenado pelo array
  * @param min_length_allocated quantidade mínima que deve estar alocado
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return nova instância de ArrayList
  */
-ArrayList* new_array_list_allocated(ArrayListType type, size_t min_length_allocated);
+ArrayList* new_array_list_allocated(ArrayListType type, size_t min_length_allocated, EMD_ERR* err);
 
 /**
  * Cria um novo ArrayList vazio
@@ -175,9 +183,10 @@ ArrayList* new_array_list_allocated(ArrayListType type, size_t min_length_alloca
  * ArrayList->reallocate_strategy = ARRAY_LIST_DEFAULT_STRATEGY_REALLOCATED # ARRAY_LIST_HALF_STRATEGY_REALLOCATED
  *
  * @param type tipo de dados armazenado pelo array
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return nova instância do ArrayList
  */
-ArrayList* new_array_list(ArrayListType type);
+ArrayList* new_array_list(ArrayListType type, EMD_ERR* err);
 
 /**
  * @param array_list instância do ArrayList
@@ -192,9 +201,10 @@ size_t array_list_get_length_allocated(ArrayList* array_list);
  *
  * @param array_list instância do ArrayList
  * @param length_allocated quantidade mínima que deve estar alocada
- * @return 0 se uma realocação foi necessária
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_allocated);
+EMD_BIT array_list_set_min_length_allocated(ArrayList* array_list, size_t length_allocated, EMD_ERR* err);
 
 /**
  * Informa a quantidade máxima de espaço que deve estar alocado
@@ -203,9 +213,10 @@ short array_list_set_min_length_allocated(ArrayList* array_list, size_t length_a
  *
  * @param array_list instância do ArrayList
  * @param length_allocated quantidade máxima que deve estar alocada
- * @return 0 se uma realocação foi necessária
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_allocated);
+EMD_BIT array_list_set_max_length_allocated(ArrayList* array_list, size_t length_allocated, EMD_ERR* err);
 
 /**
  * Informa a quantidade exata que deve estar alocado para um determinado
@@ -215,9 +226,10 @@ short array_list_set_max_length_allocated(ArrayList* array_list, size_t length_a
  *
  * @param array_list instância do ArrayList
  * @param length_allocated quantidade exata que deve estar alocada
- * @return 0 se uma realocação ocorreu
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short array_list_set_length_allocated(ArrayList* array_list, size_t length_allocated);
+EMD_BIT array_list_set_length_allocated(ArrayList* array_list, size_t length_allocated, EMD_ERR* err);
 
 /**
  * Adiciona no final do ArrayList os valores presentes em "values"
@@ -225,8 +237,9 @@ short array_list_set_length_allocated(ArrayList* array_list, size_t length_alloc
  * @param array_list instância do ArrayList que receberá os valores
  * @param values array contendo os valores a serem atribuídos
  * @param size quantidade de valores a serem adicionados
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_add_all(ArrayList* array_list, void* values, size_t size);
+void array_list_add_all(ArrayList* array_list, void* values, size_t size, EMD_ERR* err);
 
 /**
  * Adiciona em uma posição específica do ArrayList os valores presentes em "values"
@@ -235,8 +248,9 @@ void array_list_add_all(ArrayList* array_list, void* values, size_t size);
  * @param values array contendo os valores a serem atribuídos
  * @param size quantidade de valores a serem adicionados
  * @param index posição a ser adicionado os valores
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_add_all_at(ArrayList* array_list, void* values, size_t size, size_t index);
+void array_list_add_all_at(ArrayList* array_list, void* values, size_t size, size_t index, EMD_ERR* err);
 
 /**
  * Ordena o ArrayList
@@ -245,8 +259,19 @@ void array_list_add_all_at(ArrayList* array_list, void* values, size_t size, siz
  * @param cmp função comparadora
  * @param begin primeira posição a ser ordenada (inclusive)
  * @param end última posição a ser ordenada (exclusive)
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_sort(ArrayList* array_list, size_t (*cmp)(void*, void*), size_t begin, size_t end);
+void array_list_sort(ArrayList* array_list, size_t (*cmp)(void*, void*), size_t begin, size_t end, EMD_ERR* err);
+
+/**
+ * Troca os valores de duas posições de uma instância do ArrayList
+ *
+ * @param array_list instância do ArrayList
+ * @param i posição do primeiro valor a ser trocado
+ * @param j posição do segundo valor a ser trocado
+ * @param err referência para armazenar o valor do erro, caso ocorra
+ */
+void array_list_swap(ArrayList* array_list, size_t i, size_t j, EMD_ERR* err);
 
 // ### implements interface_list.h ###
 
@@ -255,9 +280,10 @@ void array_list_sort(ArrayList* array_list, size_t (*cmp)(void*, void*), size_t 
  *
  * @param array_list instância do ArrayList
  * @param index posição do alemento
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return a referência do valor buscado. NULL caso não seja encontrado
  */
-void* array_list_get_at(ArrayList* array_list, size_t index);
+void* array_list_get_at(ArrayList* array_list, size_t index, EMD_ERR* err);
 
 /**
  * Atualiza o valor do elemento do ArrayList que possui a posição fornecida
@@ -265,15 +291,16 @@ void* array_list_get_at(ArrayList* array_list, size_t index);
  * @param array_list instância do ArrayList
  * @param index posição do elemento a ser atualizado
  * @param value valor a ser atribuído
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_set_at(ArrayList* array_list, size_t index, void* value);
+void array_list_set_at(ArrayList* array_list, size_t index, void* value, EMD_ERR* err);
 
 /**
  * Busca a posição no ArrayList da referência fornecida
  *
  * @param array_list instância do ArrayList
  * @param value referência a ser buscada
- * @return posição na lista da referência. -1 se não for encontrada
+ * @return posição no ArrayList da referência fornecida
  */
 size_t array_list_find_index_by_reference(ArrayList* array_list, void* value);
 
@@ -282,8 +309,9 @@ size_t array_list_find_index_by_reference(ArrayList* array_list, void* value);
  *
  * @param array_list instância do ArrayList que receberá o valor
  * @param value valor a ser adicionado no final do ArrayList
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_add(ArrayList* array_list, void* value);
+void array_list_add(ArrayList* array_list, void* value, EMD_ERR* err);
 
 /**
  * Adiciona um elemento no ArrayList na posicao informada
@@ -291,17 +319,18 @@ void array_list_add(ArrayList* array_list, void* value);
  * @param array_list instância do ArrayList
  * @param value valor a ser adicionado
  * @param index posição a ser adicionada o valor
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_add_at(ArrayList* array_list, void* value, size_t index);
+void array_list_add_at(ArrayList* array_list, void* value, size_t index, EMD_ERR* err);
 
 /**
  * Remove do ArrayList e apaga da memoria a refêrencia fornecida
  *
  * @param array_list instância do ArrayList
  * @param value valor a ser removido do ArrayList e apagado da memória
- * @return 0 se a referência foi encontrada, removida do ArrayList e apagada da memória.
+ * @return 1 se a referência foi encontrada, removida do ArrayList e apagada da memória. 0 caso contrário
  */
-short array_list_eraser_by_reference(ArrayList* array_list, void* value);
+EMD_BIT array_list_eraser_by_reference(ArrayList* array_list, void* value);
 
 /**
  * Remove do ArrayList e apaga elemento da memoria que possui a posição
@@ -310,17 +339,18 @@ short array_list_eraser_by_reference(ArrayList* array_list, void* value);
  * @param array_list instância do ArrayList
  * @param index posição a ter o elemento removido do ArrayList e apagado
  *        da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  */
-void array_list_eraser_at(ArrayList* array_list, size_t index);
+void array_list_eraser_at(ArrayList* array_list, size_t index, EMD_ERR* err);
 
 /**
  * Remove do ArrayList sem apagar da memoria a refêrencia fornecida
  *
  * @param array_list instância do ArrayList
  * @param value valor a ser removido do ArrayList sem ser apagado da memória
- * @return 0 se a referência foi encontrada e removida do ArrayList.
+ * @return 1 se a referência foi encontrada e removida do ArrayList. 0 caso contrário
  */
-short array_list_remove_by_reference(ArrayList* array_list, void* value);
+EMD_BIT array_list_remove_by_reference(ArrayList* array_list, void* value);
 
 /**
  * Remove do ArrayList sem apagar elemento da memoria que possui a posição
@@ -329,9 +359,10 @@ short array_list_remove_by_reference(ArrayList* array_list, void* value);
  * @param array_list instância do ArrayList
  * @param index posição a ter o elemento removido do ArrayList sem ser
  *        apagado da memória
+ * @param err referência para armazenar o valor do erro, caso ocorra
  * @return referência removida do ArrayList
  */
-void* array_list_remove_at(ArrayList* array_list, size_t index);
+void* array_list_remove_at(ArrayList* array_list, size_t index, EMD_ERR* err);
 
 /**
  * Remove os elementos do ArrayList sem apagar os elementos da memoria.

@@ -2,6 +2,9 @@
 #include <string.h>
 #include "cemdutil/array_list.h"
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 /**
  * Cria uma estratégia de realocar apenas o espaço necessário pelo
  * tamanho do array
