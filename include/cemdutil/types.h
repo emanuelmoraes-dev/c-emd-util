@@ -4,7 +4,7 @@
 #include <limits.h>
 
 #define EMD_OK 0
-#define EMD_ERRNO (INT_MIN + 1)
+#define EMD_ERRNO INT_MIN + 1
 #define EMD_OVERFLOW 1001
 #define EMD_INDEX_OVERFLOW 1002
 

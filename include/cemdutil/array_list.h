@@ -45,7 +45,7 @@ typedef struct __st_array_list_type {
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do ArrayList
- * @param err referência para armazenar o valor do erro, caso ocorra
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
@@ -57,7 +57,7 @@ typedef size_t ArrayListReallocateStrategy(size_t length_allocated, size_t lengh
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do ArrayList
- * @param err referência para armazenar o valor do erro, caso ocorra
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
@@ -68,7 +68,7 @@ size_t ARRAY_LIST_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, size_t si
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do array
- * @param err referência para armazenar o valor do erro, caso ocorra
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
@@ -79,7 +79,7 @@ size_t ARRAY_LIST_HALF_STRATEGY_REALLOCATED(size_t length_allocated, size_t size
  *
  * @param length_allocated expaço atualmente definido para realocação
  * @param size tamanho atual do array
- * @param err referência para armazenar o valor do erro, caso ocorra
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
