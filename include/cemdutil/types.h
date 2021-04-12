@@ -3,12 +3,19 @@
 
 #include <limits.h>
 
-#define EMD_OK 0
+#define EMD_OK (0)
 #define EMD_ERRNO (INT_MIN + 1)
-#define EMD_OVERFLOW 1001
-#define EMD_INDEX_OVERFLOW 1002
+#define __EMD_ERRBASE (1000)
+#define EMD_ERR_PANIC (__EMD_ERRBASE + 0)
+#define EMD_ERR_OVERFLOW (__EMD_ERRBASE + 1)
+#define EMD_ERR_INDEX_OVERFLOW (__EMD_ERRBASE + 2)
+#define EMD_ERR_INVALID_TARGET (__EMD_ERRBASE + 3)
+#define EMD_ERR_ERROR_NOT_PRESENT (__EMD_ERRBASE + 4)
+#define EMD_ERR_INSTANCE_NOT_PRESENT (__EMD_ERRBASE + 5)
 
-typedef int EMD_ERR;
+#define EMD_ERR_ARG_NOT_PRESENT (__EMD_ERRBASE + __EMD_ERRBASE)
+
+typedef long EMD_ERR;
 typedef char EMD_BIT;
 
 #endif // C_EMD_UTIL_TYPES_H_INCLUDED

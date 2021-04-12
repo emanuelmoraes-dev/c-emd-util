@@ -1,5 +1,9 @@
 #include <math.h>
+#include <stdint.h>
 #include "cemdutil/dynamic_string.h"
+#include "cemdutil/error_utility.h"
+
+#define SIZE_MIN 0
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
@@ -14,7 +18,15 @@
  */
 void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
     void* ptr = malloc(_new_size);
-    memcpy(ptr, _ptr, MIN(_old_size, _new_size));
+    if (ptr == NULL)
+        return NULL;
+
+    void* p = memcpy(ptr, _ptr, MIN(_old_size, _new_size));
+    if (p == NULL) {
+        free(ptr);
+        return NULL;
+    }
+
     free(_ptr);
     return ptr;
 }
@@ -26,10 +38,15 @@ void* __mfrealloc(void* _ptr, size_t _new_size, size_t _old_size) {
  * @param length_allocated expaço atualmente definido para realocação
  * @param lenght quantidade de caracteres atualmente armazenados na String,
  *        desconsiderando o \0
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t STRING_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght) {
+size_t STRING_STRICT_REALLOCATE_STRATEGY(size_t length_allocated, size_t lenght, EMD_ERR* err) {
+    *err = ERROR_CHECK_OVERFLOW_ADD(lenght, 1, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return length_allocated;
     return lenght+1;
 }
 
@@ -39,12 +56,22 @@ size_t STRING_STRICT_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght
  * @param length_allocated expaço atualmente definido para realocação
  * @param lenght quantidade de caracteres atualmente armazenados na String,
  *        desconsiderando o \0
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t STRING_HALF_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght) {
+size_t STRING_HALF_REALLOCATE_STRATEGY(size_t length_allocated, size_t lenght, EMD_ERR* err) {
+    *err = ERROR_CHECK_OVERFLOW_ADD(lenght, 1, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return length_allocated;
+
     lenght++;
     size_t half = ceil(lenght / 2.0);
+
+    *err = ERROR_CHECK_OVERFLOW_ADD(lenght, half, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return length_allocated;
     return lenght + half;
 }
 
@@ -54,11 +81,18 @@ size_t STRING_HALF_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght) 
  * @param length_allocated expaço atualmente definido para realocação
  * @param lenght quantidade de caracteres atualmente armazenados na String,
  *        desconsiderando o \0
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            atribuído, o valor é automaticamente definido como 0 (sem erros).
  * @return novo espaço a ser realocado (se não for o suficiente, a função será
  *         chamada novamente)
  */
-size_t STRING_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght) {
+size_t STRING_DOUBLE_REALLOCATE_STRATEGY(size_t length_allocated, size_t lenght, EMD_ERR* err) {
     length_allocated = MAX(1, length_allocated);
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(length_allocated, 2, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return length_allocated;
+
     return length_allocated*2;
 }
 
@@ -69,11 +103,36 @@ size_t STRING_DOUBLE_STRATEGY_REALLOCATED(size_t length_allocated, size_t lenght
  * @return string no formato c
  */
 char* string_c(String* str) {
+    return str->__c_str;
+}
+
+/**
+ * Obtém a String dinâmica no formato C
+ *
+ * @param str instância da string dinâmica
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            atribuído, o valor é automaticamente definido como 0 (sem erros).
+ * @return string no formato c
+ */
+char* __string_c_realloc(String* str, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str, NULL, __string_c_realloc)
+
     if (str->__c_str == NULL) {
-        str->__c_str = (char*) malloc(sizeof(char));
+        size_t quant_alloc = MAX(1, str->min_extra);
+
+        *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), quant_alloc, SIZE_MIN, SIZE_MAX);
+        if (*err != EMD_OK)
+            return NULL;
+
+        str->__c_str = (char*) malloc(sizeof(char) * quant_alloc);
+        if (str->__c_str == NULL) {
+            *err = EMD_ERRNO;
+            return NULL;
+        }
+
         str->lenght = 0;
         str->__c_str[0] = '\0';
-        str->__length_allocated = 1;
+        str->__length_allocated = quant_alloc;
     }
     return str->__c_str;
 }
@@ -93,57 +152,71 @@ void __string_set_c(String* str, char* c_str) {
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @param min_extra valor extra mínimo na realocação da String
  * @param reallocate_strategy estratégia para realocação
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_init_reallocate_strategy(String* str, const char* s, size_t min_length_allocated, size_t min_extra, StringReallocateStrategy* reallocate_strategy) {
+void string_init_reallocate_strategy(String* str, const char* s, size_t min_length_allocated, size_t min_extra, StringReallocateStrategy* reallocate_strategy, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_init_reallocate_strategy)
+
     if (s == NULL) s = "";
     str->min_extra = min_extra;
     str->reallocate_strategy = reallocate_strategy;
     str->lenght = strlen(s);
     str->__length_allocated = 1;
 
-    while (str->__length_allocated <= str->lenght) {
-        str->__length_allocated = str->reallocate_strategy(str->__length_allocated, str->lenght);
+    *err = ERROR_CHECK_OVERFLOW_ADD(str->lenght, 1, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
+    str->__length_allocated = str->lenght + 1;
+    str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
+    str->__length_allocated = MAX(str->__length_allocated, str->min_extra);
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), str->__length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
+    char* pointer = (char*) malloc(sizeof(char) * str->__length_allocated);
+    if (pointer == NULL) {
+        *err = EMD_ERRNO;
+        return;
     }
 
-    str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
-    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
-    __string_set_c(str, (char*) malloc(sizeof(char) * str->__length_allocated));
-    strcpy(string_c(str), s);
+    __string_set_c(str,  pointer);
+    strcpy(pointer, s);
 }
 
 /**
  * Inicializador de string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
- * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ * String->reallocate_strategy = STRING_DEFAULT_REALLOCATE_STRATEGY # STRING_HALF_REALLOCATE_STRATEGY
  *
  * @param str instância de String dinâmica
  * @param s valor a ser copiado para String dinâmica
  * @param min_length_allocated quantidade mínima que deve estar alocado
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_init_allocated(String* str, const char* s, size_t min_length_allocated) {
-    if (s == NULL) s = "";
-    str->min_extra = STRING_DEFAULT_MIN_EXTRA;
-    str->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED;
-    str->lenght = strlen(s);
-    str->__length_allocated = 1;
-    str->__length_allocated = MAX(str->__length_allocated, min_length_allocated);
-    str->__length_allocated = MAX(str->__length_allocated, (str->lenght+1) + (str->min_extra));
-    __string_set_c(str, (char*) malloc(sizeof(char) * str->__length_allocated));
-    strcpy(string_c(str), s);
+void string_init_allocated(String* str, const char* s, size_t min_length_allocated, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_init_allocated)
+    string_init_reallocate_strategy(str, s, min_length_allocated, STRING_DEFAULT_MIN_EXTRA, STRING_DEFAULT_REALLOCATE_STRATEGY, err);
 }
 
 /**
  * Inicializador de string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
- * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ * String->reallocate_strategy = STRING_DEFAULT_REALLOCATE_STRATEGY # STRING_HALF_REALLOCATE_STRATEGY
  *
  * @param str instância de String dinâmica
  * @param s valor a ser copiado para String dinâmica
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_init(String* str, const char* s) {
-    string_init_reallocate_strategy(str, s, 0, STRING_DEFAULT_MIN_EXTRA, STRING_DEFAULT_STRATEGY_REALLOCATED);
+void string_init(String* str, const char* s, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_init)
+    string_init_reallocate_strategy(str, s, 0, STRING_DEFAULT_MIN_EXTRA, STRING_DEFAULT_REALLOCATE_STRATEGY, err);
 }
 
 /**
@@ -156,11 +229,15 @@ void string_init(String* str, const char* s) {
  * @param min_length_allocated quantidade mínima que deve estar alocado
  * @param min_extra valor extra mínimo na realocação da String
  * @param reallocate_strategy estratégia para realocação
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  * @return nova instância de String dinâmica
  */
-String* new_string_reallocate_strategy(const char* s, size_t min_length_allocated, size_t min_extra, StringReallocateStrategy* reallocate_strategy) {
+String* new_string_reallocate_strategy(const char* s, size_t min_length_allocated, size_t min_extra, StringReallocateStrategy* reallocate_strategy, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR(err, new_string_reallocate_strategy)
+
     String* str = (String*) malloc(sizeof(String));
-    string_init_reallocate_strategy(str, s, min_length_allocated, min_extra, reallocate_strategy);
+    string_init_reallocate_strategy(str, s, min_length_allocated, min_extra, reallocate_strategy, err);
     return str;
 }
 
@@ -168,15 +245,19 @@ String* new_string_reallocate_strategy(const char* s, size_t min_length_allocate
  * Cria uma string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
- * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ * String->reallocate_strategy = STRING_DEFAULT_REALLOCATE_STRATEGY # STRING_HALF_REALLOCATE_STRATEGY
  *
  * @param s valor a ser copiado para String dinâmica
  * @param min_length_allocated quantidade mínima que deve estar alocado
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  * @return nova instância de String dinâmica
  */
-String* new_string_allocated(const char* s, size_t min_length_allocated) {
+String* new_string_allocated(const char* s, size_t min_length_allocated, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR(err, new_string_allocated)
+
     String* str = (String*) malloc(sizeof(String));
-    string_init_allocated(str, s, min_length_allocated);
+    string_init_allocated(str, s, min_length_allocated, err);
     return str;
 }
 
@@ -184,14 +265,18 @@ String* new_string_allocated(const char* s, size_t min_length_allocated) {
  * Cria uma string dinâmica
  *
  * String->min_extra = STRING_DEFAULT_MIN_EXTRA # 20
- * String->reallocate_strategy = STRING_DEFAULT_STRATEGY_REALLOCATED # STRING_HALF_STRATEGY_REALLOCATED
+ * String->reallocate_strategy = STRING_DEFAULT_REALLOCATE_STRATEGY # STRING_HALF_REALLOCATE_STRATEGY
  *
  * @param s valor a ser copiado para String dinâmica
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  * @return nova instância de String dinâmica
  */
-String* new_string(const char* s) {
+String* new_string(const char* s, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR(err, new_string)
+
     String* str = (String*) malloc(sizeof(String));
-    string_init(str, s);
+    string_init(str, s, err);
     return str;
 }
 
@@ -199,7 +284,7 @@ String* new_string(const char* s) {
  * @param str instância da String dinâmicas
  * @return quantidade de espaço alocado para a String dinâmica
  */
-size_t string_get_length_allocated(String* str) {
+size_t string_get_length_allocated(const String* str) {
     return str->__length_allocated;
 }
 
@@ -210,17 +295,40 @@ size_t string_get_length_allocated(String* str) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade mínima que deve estar alocada
- * @return 0 se uma realocação foi necessária
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short string_set_min_length_allocated(String* str, size_t length_allocated) {
+EMD_BIT string_set_min_length_allocated(String* str, size_t length_allocated, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str, 0, string_set_min_length_allocated)
+
     if (str->__length_allocated >= length_allocated)
-        return 1;
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), str->__length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
 
     size_t new_length = sizeof(char) * length_allocated;
     size_t old_length = sizeof(char) * str->__length_allocated;
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
+
+    char* pointer = __string_c_realloc(str, err);
+    if (*err != EMD_OK)
+        return 0;
+
+    pointer = (char*) __mfrealloc(pointer, new_length, old_length);
+    if (pointer == NULL) {
+        *err = EMD_ERRNO;
+        return 0;
+    }
+
+    __string_set_c(str, pointer);
     str->__length_allocated = length_allocated;
-    return 0;
+    return 1;
 }
 
 /**
@@ -230,17 +338,40 @@ short string_set_min_length_allocated(String* str, size_t length_allocated) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade máxima que deve estar alocada
- * @return 0 se uma realocação foi necessária
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short string_set_max_length_allocated(String* str, size_t length_allocated) {
+EMD_BIT string_set_max_length_allocated(String* str, size_t length_allocated, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str, 0, string_set_max_length_allocated)
+
     if (str->__length_allocated <= length_allocated || str->lenght >= length_allocated)
-        return 1;
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), str->__length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
 
     size_t new_length = sizeof(char) * length_allocated;
     size_t old_length = sizeof(char) * str->__length_allocated;
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
+
+    char* pointer = __string_c_realloc(str, err);
+    if (*err != EMD_OK)
+        return 0;
+
+    pointer = (char*) __mfrealloc(pointer, new_length, old_length);
+    if (pointer == NULL) {
+        *err = EMD_ERRNO;
+        return 0;
+    }
+
+    __string_set_c(str, pointer);
     str->__length_allocated = length_allocated;
-    return 0;
+    return 1;
 }
 
 /**
@@ -251,17 +382,40 @@ short string_set_max_length_allocated(String* str, size_t length_allocated) {
  *
  * @param str String dinâmica
  * @param length_allocated quantidade exata que deve estar alocada
- * @return 0 se uma realocação ocorreu
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
+ * @return 1 se uma realocação foi necessária. 0 caso contrário
  */
-short string_set_length_allocated(String* str, size_t length_allocated) {
+EMD_BIT string_set_length_allocated(String* str, size_t length_allocated, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str, 0, string_set_length_allocated)
+
     if (str->lenght >= length_allocated)
-        return 1;
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
+
+    *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), str->__length_allocated, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return 0;
 
     size_t new_length = sizeof(char) * length_allocated;
     size_t old_length = sizeof(char) * str->__length_allocated;
-    __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
+
+    char* pointer = __string_c_realloc(str, err);
+    if (*err != EMD_OK)
+        return 0;
+
+    pointer = (char*) __mfrealloc(pointer, new_length, old_length);
+    if (pointer == NULL) {
+        *err = EMD_ERRNO;
+        return 0;
+    }
+
+    __string_set_c(str, pointer);
     str->__length_allocated = length_allocated;
-    return 0;
+    return 1;
 }
 
 /**
@@ -269,26 +423,66 @@ short string_set_length_allocated(String* str, size_t length_allocated) {
  *
  * @param str instância da String dinâmica
  * @param s valor a ser atribuído a 'str'
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_set(String* str, const char* s) {
+void string_set(String* str, const char* s, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_set)
+
     str->lenght = strlen(s);
-    short flag = 0;
+    EMD_BIT flag = 0;
     size_t length_allocated = str->__length_allocated;
 
     while (length_allocated <= str->lenght) {
-        length_allocated = str->reallocate_strategy(length_allocated, str->lenght);
+        length_allocated = str->reallocate_strategy(length_allocated, str->lenght, err);
+        if (*err != EMD_OK)
+            return;
         flag = 1;
     }
 
     if (flag) {
+        *err = ERROR_CHECK_OVERFLOW_ADD(str->lenght, str->min_extra, SIZE_MIN, SIZE_MAX);
+        if (*err != EMD_OK)
+            return;
+
+        *err = ERROR_CHECK_OVERFLOW_MULT(str->lenght + str->min_extra, 1, SIZE_MIN, SIZE_MAX);
+        if (*err != EMD_OK)
+            return;
+
         length_allocated = MAX(length_allocated, str->lenght + str->min_extra + 1);
+
+        *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), length_allocated, SIZE_MIN, SIZE_MAX);
+        if (*err != EMD_OK)
+            return;
+
+        *err = ERROR_CHECK_OVERFLOW_MULT(sizeof(char), str->__length_allocated, SIZE_MIN, SIZE_MAX);
+        if (*err != EMD_OK)
+            return;
+
         size_t new_length = sizeof(char) * length_allocated;
         size_t old_length = sizeof(char) * str->__length_allocated;
-        __string_set_c(str, (char*) __mfrealloc(string_c(str), new_length, old_length));
+
+        char* pointer = __string_c_realloc(str, err);
+        if (*err != EMD_OK)
+            return;
+
+        pointer = (char*) __mfrealloc(pointer, new_length, old_length);
+        if (pointer == NULL) {
+            *err = EMD_ERRNO;
+            return;
+        }
+
+        __string_set_c(str, pointer);
         str->__length_allocated = length_allocated;
     }
 
-    strcpy(string_c(str), s);
+    char* pointer = string_c(str);
+    if (pointer == NULL) {
+        *err = EMD_ERR_PANIC;
+        return;
+    }
+
+    strcpy(pointer, s);
 }
 
 /**
@@ -296,14 +490,50 @@ void string_set(String* str, const char* s) {
  *
  * @param str instância da String dinâmica
  * @param s valor a ser concatenado
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_cat(String* str, const char* s) {
+void string_cat(String* str, const char* s, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_cat)
+
     size_t len_s = strlen(s);
+
+    *err = ERROR_CHECK_OVERFLOW_ADD(len_s, str->lenght, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
+    *err = ERROR_CHECK_OVERFLOW_ADD(len_s + str->lenght, 2, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
     char ns[len_s + str->lenght + 2];
-    strcpy(ns, "");
-    strcpy(ns, string_c(str));
-    strcat(ns, s);
-    string_set(str, ns);
+    void* p = NULL;
+
+    p = strcpy(ns, "");
+    if (p == NULL) {
+        *err = EMD_ERRNO;
+        return;
+    }
+
+    char* pointer = __string_c_realloc(str, err);
+    if (*err != EMD_OK)
+        return;
+
+    p = strcpy(ns, pointer);
+    if (p == NULL) {
+        *err = EMD_ERRNO;
+        return;
+    }
+
+    p = strcat(ns, s);
+    if (p == NULL) {
+        *err = EMD_ERRNO;
+        return;
+    }
+
+    string_set(str, ns, err);
+    if (*err != EMD_OK)
+        return;
 }
 
 /**
@@ -338,31 +568,57 @@ void string_free(void* _str) {
  * Altera uma String dinâmica para receber uma substring de outra
  * String dinâmica
  *
- * @param str instânciada String dinâmica
+ * @param str string de onde será obtido a substring
  * @param target instância que irá receber a substring. Precisa
  *        já estar alocada. Não pode ser a mesma instância de str
- * @param start posição inicial da substring
+ * @param begin posição inicial da substring
  * @param end posição final da substring (não incluso)
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  */
-void string_sub(String* str, String* target, size_t start, size_t end) {
-    if (str == target)
-        exit(1);
+void string_sub(const char* str, String* target, size_t begin, size_t end, EMD_ERR* err) {
+    ERROR_REQUIRED_ERR_METHOD(err, str,, string_sub)
+    TARGET_VERIFY(target, str,, err)
 
-    size_t len = str->lenght;
+    size_t len = strlen(str);
 
-    if (len < end || start >= end || start < 0)
-        exit(1);
+    if (MAX(begin, end) >= len || MIN(begin, end) < 0) {
+        *err = EMD_ERR_INDEX_OVERFLOW;
+        return;
+    }
 
-    size_t len_sub = end - start;
+    if (begin >= end)
+        return;
 
-    string_set(target, "");
-    string_set_min_length_allocated(target, len_sub + 1);
+    *err = ERROR_CHECK_OVERFLOW_SUB(end, begin, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
+    size_t len_sub = end - begin;
+
+    string_set(target, "", err);
+    if (*err != EMD_OK)
+        return;
+
+    *err = ERROR_CHECK_OVERFLOW_ADD(len_sub, 1, SIZE_MIN, SIZE_MAX);
+    if (*err != EMD_OK)
+        return;
+
+    string_set_min_length_allocated(target, len_sub + 1, err);
+    if (*err != EMD_OK)
+        return;
+
+    char* pointer = string_c(target);
+    if (pointer == NULL) {
+        *err = EMD_ERR_PANIC;
+        return;
+    }
 
     size_t i;
     for (i = 0; i < len_sub; i++)
-        string_c(target)[i] = string_c(str)[start++];
+        pointer[i] = str[begin++];
 
-    string_c(target)[len_sub] = '\0';
+    pointer[len_sub] = '\0';
     target->lenght = len_sub;
 }
 
@@ -372,10 +628,12 @@ void string_sub(String* str, String* target, size_t start, size_t end) {
  *
  * @param str instância da String dinâmica que será separada
  * @param sep separador que divide a String em várias partes
+ * @param err referência para armazenar o valor do erro, caso ocorra. Se não
+ *            ocorrer erro, o valor é automaticamente definido como 0
  * @return tamanho do array que armazenará o resultado
  *         do split
  */
-size_t string_size_split(String* str, const char* sep) {
+size_t string_size_split(const char* str, const char* sep, EMD_ERR* err) {
     if (strcmp(sep, "") == 0)
         return str->lenght;
 

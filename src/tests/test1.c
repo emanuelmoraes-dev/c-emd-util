@@ -76,7 +76,7 @@ int main (int argc, const char* argv[]) {
     string_clear(str);
     free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_STRICT_STRATEGY_REALLOCATED);
+    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_STRICT_REALLOCATE_STRATEGY);
 
     printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
@@ -87,7 +87,7 @@ int main (int argc, const char* argv[]) {
     string_clear(str);
     free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_HALF_STRATEGY_REALLOCATED);
+    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_HALF_REALLOCATE_STRATEGY);
 
     printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 
@@ -98,7 +98,7 @@ int main (int argc, const char* argv[]) {
     string_clear(str);
     free(str);
 
-    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_DOUBLE_STRATEGY_REALLOCATED);
+    str = new_string_reallocate_strategy("Hello!", 0, 2, STRING_DOUBLE_REALLOCATE_STRATEGY);
 
     printf("%s / %d / %d\n", string_c(str), str->lenght, string_get_length_allocated(str));
 

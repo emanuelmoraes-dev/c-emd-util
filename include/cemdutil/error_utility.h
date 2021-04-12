@@ -1,27 +1,71 @@
 #ifndef C_EMD_UTIL_ERROR_UTILITY_H_INCLUDED
 #define ifndef C_EMD_UTIL_ERROR_UTILITY_H_INCLUDED
 
+#include <stdio.h>
+#include <math.h>
 #include "cemdutil/types.h"
+
+#define ERROR_IS(err, ERROR) (\
+    ((EMD_ERR)(floor((err) / __EMD_ERRBASE) * __EMD_ERRBASE)) == (ERROR)\
+)
+
+#define ERROR_GETC(err) (\
+    (err) % __EMD_ERRBASE\
+)
+
+#define ERROR_VERIFY(err, dr) \
+    if ((err) != EMD_OK) {\
+        return dr;\
+    }
+
+#define ERROR_REQUIRED_ERR(err, function) \
+    if ((err) == NULL) {\
+        fprintf(stderr, "Error: %s is NULL in %s\n", #err, #function);\
+        exit(EMD_ERR_ERROR_NOT_PRESENT);\
+    } else {\
+        *(err) = EMD_OK;\
+    }
+
+#define ERROR_REQUIRED_ERR_METHOD(err, instance, dr, method) \
+    if ((err) == NULL) {\
+        fprintf(stderr, "Error: %s is NULL in %s\n", #err, #method);\
+        exit(EMD_ERR_ERROR_NOT_PRESENT);\
+    } else if ((instance) == NULL) {\
+        *(err) = EMD_ERR_INSTANCE_NOT_PRESENT;\
+        return dr;\
+    } else {\
+        *(err) = EMD_OK;\
+    }
+
+#define ERROR_REQUIRED_ARG(err, arg, argc, dr, function) \
+    if ((arg) == NULL) {\
+        *(err) = EMD_ERR_ARG_NOT_PRESENT + (argc);\
+        return dr;\
+    }
 
 #define ERROR_IS_OVERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE) \
     (((x) > 0) && ((a) > (MAX_VALUE) - (x)))
 
 #define ERROR_IS_UNDERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE) \
-    (((x) < 0) && ((a) < (MIX_VALUE) - (x)))
+    (((x) < 0) && ((a) < (MIN_VALUE) - (x)))
 
-#define ERROR_CHECK_OVERFLOW_ADD(a, x, MIX_VALUE, MAX_VALUE) \
-    if (ERROR_IS_OVERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE)) return EMD_OVERFLOW;\
-    if (ERROR_IS_UNDERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE)) return -EMD_OVERFLOW
+#define ERROR_CHECK_OVERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE) (\
+    ERROR_IS_OVERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE) ? EMD_ERR_OVERFLOW :\
+    ERROR_IS_UNDERFLOW_ADD(a, x, MIN_VALUE, MAX_VALUE) ? -EMD_ERR_OVERFLOW :\
+    EMD_OK\
+)
 
-#define ERROR_IS_OVERFLOW_SUB(a, x, MIX_VALUE, MAX_VALUE) \
+#define ERROR_IS_OVERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) \
     (((x) < 0) && ((a) > (MAX_VALUE) + (x)))
 
 #define ERROR_IS_UNDERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) \
     (((x) > 0) && ((a) < (MIN_VALUE) + (x)))
 
-#define ERROR_CHECK_OVERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) \
-    if (ERROR_IS_OVERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE)) return EMD_OVERFLOW;\
-    if (ERROR_IS_UNDERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE)) return -EMD_OVERFLOW
+#define ERROR_CHECK_OVERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) (\
+    ERROR_IS_OVERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) ? EMD_ERR_OVERFLOW :\
+    ERROR_IS_UNDERFLOW_SUB(a, x, MIN_VALUE, MAX_VALUE) ? -EMD_ERR_OVERFLOW :\
+    EMD_OK\
+)
 
 #define __ERROR_IS_OVERFLOW_ABS_MULT(a, x, MIN_VALUE, MAX_VALUE) \
     ((x) && (a) > (MAX_VALUE) / (x))
@@ -30,7 +74,7 @@
     ((x_positive) && (a_negative) < (MIN_VALUE) / (x_positive))
 
 #define __ERROR_ABS(a) \
-    ((a) < 0 ? (a) * (-1) ? (a))
+    ((a) < 0 ? (a) * (-1) : (a))
 
 #define __ERROR_MULT_IS_NEGATIVE(a, x) (\
     ((a) < 0 && (x) > 0) ||\
@@ -67,8 +111,10 @@
     )\
 )
 
-#define ERROR_CHECK_OVERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE) \
-    if (ERROR_IS_OVERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE)) return EMD_OVERFLOW;\
-    if (ERROR_IS_UNDERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE)) return -EMD_OVERFLOW
+#define ERROR_CHECK_OVERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE) (\
+    ERROR_IS_OVERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE) ? EMD_ERR_OVERFLOW :\
+    ERROR_IS_UNDERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE) ? -EMD_ERR_OVERFLOW :\
+    EMD_OK\
+)
 
 #endif // ifndef C_EMD_UTIL_ERROR_UTILITY_H_INCLUDED
