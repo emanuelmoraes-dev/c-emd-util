@@ -10,7 +10,7 @@ Define some generic types and configurations and the values of the errors
 
 Provide macros to verify errors and prevents overflow and underflow errors before a mathematical operation
 
-## dynamic_string.h
+## dstring.h
 
 Creates strings that are dynamically allocated
 

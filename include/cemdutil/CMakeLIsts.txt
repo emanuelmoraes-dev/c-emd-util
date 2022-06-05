@@ -1,0 +1,7 @@
+add_library(cemdutil)
+
+target_sources(
+    cemdutil
+    PUBLIC
+        dstring.h
+)
