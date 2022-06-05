@@ -30,20 +30,15 @@ elseif (USING_GCC)
     )
 endif()
 
-add_library(
-    base_warnings
-    INTERFACE
-)
-
 target_compile_options(
-    base_warnings
+    base
     INTERFACE
         ${WARNS}
 )
 
 if (OPT_WARNS_AS_ERR)
     target_compile_options(
-        base_warnings
+        base
         INTERFACE
             ${WARNS_AS_ERR}
     )

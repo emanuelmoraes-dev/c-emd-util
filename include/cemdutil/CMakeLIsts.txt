@@ -3,5 +3,7 @@ add_library(cemdutil)
 target_sources(
     cemdutil
     PUBLIC
+        def.h
         dstring.h
+        error_utility.h
 )
