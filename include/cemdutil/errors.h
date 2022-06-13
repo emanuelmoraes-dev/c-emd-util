@@ -1,9 +1,10 @@
 #ifndef _CEMDUTIL_ERROR_UTILITY_H_INCLUDED_
 #define _CEMDUTIL_ERROR_UTILITY_H_INCLUDED_
 
-#include <stdio.h>
 #include <math.h>
 #include "cemdutil/def.h"
+
+#define ERROR_MAX_MESSAGE_LENGTH 120
 
 #define EMD_OK (0) // no errors
 #define EMD_ERRNO (INT_MIN + 1) // the error is in errno
@@ -48,17 +49,10 @@
         *(err) = (value);\
     }
 
-#define ERROR_VERIFY(err, dr) \
-    if ((err) != EMD_OK) {\
-        return dr;\
-    }
-
 #define ERROR_VERIFY_INSTANCE(err, instance, dr) \
     if ((instance) == NULL) {\
         ERROR_SET_ERR(err, EMD_ERR_INSTANCE_NOT_PRESENT)\
         return dr;\
-    } else {\
-        ERROR_SET_ERR(err, EMD_OK)\
     }
 
 #define ERROR_VERIFY_ARG(err, arg, dr) \
