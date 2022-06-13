@@ -2,13 +2,13 @@
 
 Provide a set of useful libraries for C language
 
-## types.h
+## def.h
 
-Define some generic types and configurations and the values of the errors
+Define the types
 
-## error_utility.h
+## errors.h
 
-Provide macros to verify errors and prevents overflow and underflow errors before a mathematical operation
+Define the errors values and provide macros to verify errors and prevents overflow and underflow errors before a mathematical operation
 
 ## dstring.h
 
@@ -21,7 +21,3 @@ Creates dynamic lists using linked lists
 ## array_list.h
 
 Creates dynamic lists using arrays that are dynamically allocated
-
-## interface_list.h
-
-Provide macros to simulate a interface between linked_list.h and array_list.h
