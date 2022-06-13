@@ -4,7 +4,7 @@
 #include <math.h>
 #include "cemdutil/def.h"
 
-#define ERROR_MAX_MESSAGE_LENGTH 120
+#define EMD_MAX_ERR_STR_LEN 120
 
 #define EMD_OK (0) // no errors
 #define EMD_ERRNO (INT_MIN + 1) // the error is in errno
@@ -33,6 +33,8 @@
 
 #define EMD_ERR_ARG_NOT_PRESENT (__EMD_ERRBASE + 7)
 #define EMD_ERR_ARG_NOT_PRESENT_MESSAGE "the function argument is NULL"
+
+#define ERROR_DEF_STR(var) char var[EMD_MAX_ERR_STR_LEN]
 
 #define ERROR_GET_MESSAGE(err) \
     (err) == EMD_ERR_PANIC ? EMD_ERR_PANIC_MESSAGE : (\
