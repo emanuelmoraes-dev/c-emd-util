@@ -63,14 +63,14 @@
     EMD_OK\
 )
 
-#define __ERROR_IS_OVERFLOW_ABS_MULT(a, x, MIN_VALUE, MAX_VALUE) \
-    ((x) && (a) > (MAX_VALUE) / (x))
+#define __ERROR_IS_OVERFLOW_POS_MULT(a_positive, x_positive, MIN_VALUE, MAX_VALUE) \
+    ((x_positive) && (a_positive) > (MAX_VALUE) / (x_positive))
+
+#define __ERROR_IS_OVERFLOW_NEG_MULT(a_negative, x_negative, MIN_VALUE, MAX_VALUE) \
+    ((a_negative) < (MAX_VALUE) / (x_negative))
 
 #define __ERROR_IS_UNDERFLOW_MULT(a_negative, x_positive, MIN_VALUE, MAX_VALUE) \
     ((x_positive) && (a_negative) < (MIN_VALUE) / (x_positive))
-
-#define __ERROR_ABS(a) \
-    ((a) < 0 ? (a) * (-1) : (a))
 
 #define __ERROR_MULT_IS_NEGATIVE(a, x) (\
     ((a) < 0 && (x) > 0) ||\
@@ -84,16 +84,12 @@
     ((a) > 0 ? (a) : (x))
 
 #define ERROR_IS_OVERFLOW_MULT(a, x, MIN_VALUE, MAX_VALUE) (\
-    (((a) == -1) && ((x) == (MIN_VALUE))) ||\
-    (((x) == -1) && ((a) == (MIN_VALUE))) ||\
     (\
-        (!__ERROR_MULT_IS_NEGATIVE(a, x)) &&\
-        __ERROR_IS_OVERFLOW_ABS_MULT(\
-            __ERROR_ABS(a),\
-            __ERROR_ABS(x),\
-            MIN_VALUE,\
-            MAX_VALUE\
-        )\
+        ((a) > 0 && (x) > 0) &&\
+        __ERROR_IS_OVERFLOW_POS_MULT(a, x, MIN_VALUE, MAX_VALUE)\
+    ) || (\
+        ((a) < 0 && (x) < 0) &&\
+        __ERROR_IS_OVERFLOW_NEG_MULT(a, x, MIN_VALUE, MAX_VALUE)\
     )\
 )
 
